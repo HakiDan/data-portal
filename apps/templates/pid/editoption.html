@@ -1,0 +1,105 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+  <div class="card" style="min-height: 40vh">
+      <div class="card-header" style="height: 10%;">
+        <h5>
+          <b>
+              SUNTING INISIATIF
+          </b>
+        </h5>
+      </div>
+      <div class="card-body pt-0" style="height: 90%;">
+        <div class="form-group">
+          <label for="Init" style="margin-bottom:4px; margin-top: 10px;"><h6 style="margin:0px">Kementerian : </h6></label>
+          <select class="form-control placeholder" style="background-color: #fff; border-color: lightgray; border-radius:10px">
+              <option value="MOF">Kementerian Kewangan Malaysia(MOF)</option>
+              <option value="KPWKM">Kementerian Pembangunan Wanita, Keluarga dan Masyarakat(KPWKM)</option>
+              <option value="MOH">Kementerian Kesihatan Malaysia(MOH)</option>
+              <option value="JPM">Jabatan Perdana Menteri(JPM)</option>
+              <option value="MINDEF">Kementerian Pertahanan Malaysia(MINDEF)</option>
+              <option value="kPT">Kementerian Pengajian Tinggi(KPT)</option>
+              <option value="KPM">kementerian Pendidikan Malaysia(KPM)</option>
+              <option value="KKMM">Kementerian Komunikasi dan Digital Malaysia(KKMM)</option>
+              <option value="KBS">Kementerian Belia dan Sukan(KBS)</option>
+              <option value="MAFI">Kementerian Pertanian & Industri Makanan Malaysia(MAFI)</option>
+              <option value="MITI">Kementerian Perdagangan Antarabangsa dan Industri(MITI)</option>
+              <option value="KSM">Kementerian Sumber Manusia(KSM)</option>
+              <option value="MOSTI">Kementerian Sains, Teknologi dan Inovasi(MOSTI)</option>
+              <Option value="KKR">Kementerian Kerja Raya(KKR)</Option>
+              <Option value="KPKT">Kementerian Pembangunan Kerajaan Tempatan(KPKT)</Option>
+              <Option value="KPN">Kementerian Perpaduan Negara(KPN)</Option>
+              <Option value="MEDAC">Kementerian Pembangunan Usahawan dan Koperasi Malaysia(MEDAC)</Option>
+              <Option value="KDN">Kementerian Dalam Negeri(KDN)</Option>
+              <Option value="MOT">Kementerian Pengangkutan Malaysia(MOT)</Option>
+              <Option value="KWP">Kementerian Wilayah Persekutuan(KWP)</Option>
+              <Option value="MOTAC">Kementerian Pelancongan dan Kebudayaan(MOTAC)</Option>
+              <Option value="KPDNHEP">Kementerian Perdagangan Dalam Negeri dan Kos Sara Hidup(KPDNHEP)</Option>
+              <Option value="KETSA">Kementerian Sumber Asli dan Alam Sekitar(KETSA)</Option>
+              <Option value="MPIC">Kementerian Perusahaan Perladangan dan Komoditi(MPIC)</Option>
+              <Option value="KASA">Kementerian Alam Sekitar dan Air(KASA)</Option>
+              <Option value="KPKT">Kementerian Pembangunan Kerajaan Tempatan(KPKT)</Option>
+              <Option value="KDN">Kementerian Dalam Negeri(KDN)</Option>
+              <Option value="KPLB">Kementerian Kemajuan Desa dan Wilayah(KPLB)</Option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="Init" style="margin-bottom:4px; margin-top: 10px;"><h6 style="margin:0px">Nama Agensi : </h6></label>
+          <input type="text" class="form-control" placeholder="" value="Agensi Pelaksanaan Baru" rows="1" cols="100"Style="background-color: #fff; border-color: lightgray; border-radius:10px">
+        </div>
+      </div>
+
+      <div class="col" style="text-align: center;">
+        <a href="{% url 'listedit' %}">
+            <button type="button" class="btn btn-warning btn-lg" style="width: 220px; background-color: #35BAE4;border-color:#35BAE4;">
+                SIMPAN
+            </button>
+        </a>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+function hantar() { 
+	let element = document.getElementById("submitbutton");
+	Swal.fire({
+		title: "Pengesahan Data", 
+		text: "Anda pasti anda mahu sahkan penyerahan data?",
+		icon: 'warning',
+		showCancelButton: true, 
+		cancelButtonText: 'Batal',
+		cancelButtonWidth: 200,
+		confirmButtonColor: '#7AC142',
+		cancelButtonColor: '#d33',
+		confirmButtonText: ' Ya ',
+		allowOutsideClick: false
+		}).then((result) => {
+			if (result.isConfirmed) {
+			Swal.fire({
+				position: 'mid',
+				icon: 'success',
+				text: 'Data telah disahkan',
+				showConfirmButton: false,
+		})
+}
+})
+}    
+
+
+</script>
+{% endblock javascripts %}
+

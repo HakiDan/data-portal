@@ -1,0 +1,1066 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+{% for group in user.groups.all %}
+  {% if group.name == "ia_group"%}
+  
+    <div class="container-fluid p-4">
+      <div class="card" style="min-height: 84vh;">
+          
+        <div class="card-header p-4" style="height: 10%;">
+          <h5 class="font-weight-bolder" style="">SOALAN LAZIM</h5>
+        </div>
+
+        <div class="card-body p-4 pt-0" style="height: 100%;">
+          <div id="accordion">
+            <!-- 1. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse1" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                            
+                  <h6><b>1. Apakah Portal Data LAKSANA (PODS)?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                            
+                </a>
+              </div>
+
+              <div id="collapse1" class="collapse" data-parent="#accordion">
+
+                <div class="card-body">
+                  PODS merupakan inisiatif LAKSANA bagi mewujudkan platform capaian
+                  penyerahan data antara Agensi Pelaksana dan pihak LAKSANA. Portal ini
+                  menawarkan kemudahan bagi pihak Agensi Pelaksana untuk memuat naik
+                  data dengan lebih efektif dan sistematik.
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- 2. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse2" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>2. Apakah yang harus saya lakukan jika saya terlupa kata laluan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+              
+              <div id="collapse2" class="collapse" data-parent="#accordion">
+
+                <div class="card-body">
+
+                  Jika anda terlupa kata laluan, sila klik di <a href="/password/" style="color: blue"><u>sini</u></a>.
+               
+                </div>
+
+              </div>
+
+            </div>
+                  
+            <!-- 3. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse3" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>3. Apakah jenis pelayar web yang menyokong paparan PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse3" class="collapse" data-parent="#accordion">
+                
+                <div class="card-body">
+
+                  PODS paling sesuai dipapar menggunakan pelayar web versi terkini.
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- 4. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+            
+              <div class="card-header" data-toggle="collapse" href="#collapse4" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>4. Dimanakah saya dapat menyemak sejarah penyerahan data?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+              
+              <div id="collapse4" class="collapse" data-parent="#accordion">
+                
+                <div class="card-body">
+
+                  Pengguna boleh menyemak dan muat turun data yang telah dihantar di <a href="/history/" style="color: blue"><u>Sejarah Penyerahan</u></a>.
+
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- 5. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse5" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>5. Bagaimanakah cara-cara untuk saya menyerahkan data?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+
+              <div id="collapse5" class="collapse" data-parent="#accordion">
+                
+                
+                <div style="display: inline;">
+                    <div class="card-body">
+                      Pengguna boleh merujuk
+                      <a href="{% url 'download_faq' file_name %}" type="button" class="btn" style="box-shadow: none; padding: 0%; background-color: white; color: blue; font-size: 1rem; margin: auto; height: 100%">
+                        <u>Panduan Pengguna PODS</u>
+                      </a>
+                  </div>
+                
+                </div>
+              
+              </div>
+
+            </div>
+
+            <!-- 6. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse6" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>6. Bagaimanakah cara-cara untuk saya mengubah kata laluan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+
+              <div id="collapse6" class="collapse" data-parent="#accordion">
+                <div class="card-body">
+                  Jika anda mahu menukar kata laluan, sila ikuti langkah seperti yang di bawah:
+                  <br>
+                  <br>
+                  1. Klik pada halaman Profil.
+                  <br>
+                  2. Klik butang "Tukar Kata Laluan".
+                  <br>
+                  3. Isikan kata laluan sekarang dan kata laluan baru.
+                  <br>
+                  4. Klik butang "Simpan" untuk menukar kata laluan lama kepada kata laluan yang baru.
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 7. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse7" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>7. Berapakah had saiz fail yang dibenarkan oleh PODS untuk dimuat naik?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse7" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Saiz optimum fail untuk dimuat naik ke dalam PODS adalah sehingga 5mb.
+                  Sekiranya fail yang dihantar melebihi 5mb, masa pemprosesan data mungkin akan
+                  melebihi 3 minit.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 8. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse8" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>8. Apakah jenis format fail yang boleh diterima oleh PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse8" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  PODS menerima fail dalam format .xlsx, .xls, .csv dan .txt.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 9. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse9" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>9. Dimanakah saya boleh melihat maklumat diri pengguna dan menukar kata laluan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse9" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Pengguna boleh melihat maklumat diri seperti nama, nombor telefon, e-mel, lokasi dan menukar kata laluan di <a href="/profile/" style="color: blue"><u>Menu Profil</u></a>.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 10. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse10" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>10. Saluran manakah yang patut dihubungi jika saya mempunyai sebarang persoalan dan masalah mengenai inisiatif dan PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse10" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Pengguna boleh menghubungi wakil Pengurus Projek LAKSANA sekiranya pengguna mempunyai sebarang persoalan dan masalah berkaitan inisiatif dan PODS.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 11. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse11" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>11. Mengapakah mesej “Nama Pengguna/Kata Laluan Salah”
+                    dipaparkan apabila saya cuba log masuk walaupun saya telah
+                    menggunakan Nama Pengguna dan Kata Laluan yang telah
+                    diberikan oleh pihak LAKSANA?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse11" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Jika pengguna menerima mesej ini, kemungkinan pengguna lupa kata laluan atau nama pengguna/kata laluan pengguna tidak didaftar. Pengguna hendaklah menghubungi wakil Pengurus Projek bagi tujuan melengkapkan pendaftaran nama pengguna dan kata laluan.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 12. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse12" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>12. Berapakah tempoh sah nama pengguna untuk PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse12" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Nama pengguna dan kata laluan akan kekal sah selagi inisiatif masih aktif.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 13. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse13" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>13. Berapa banyak nama pengguna dan kata laluan akan diterima bagi setiap Agensi Pelaksana?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse13" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Setiap Ketua Agensi Pelaksana akan diberikan satu nama pengguna dan kata laluan, manakala setiap individu yang bertanggungjawab dalam setiap inisiatif akan diberikan nama pengguna dan kata laluan bagi tujuan penyerahan data.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 14. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse14" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>14. Jika fail dan data saya mempunyai ralat, apakah yang perlu saya lakukan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse14" class="collapse" data-parent="#accordion">
+                          
+                <div style="display: inline;">
+                  <div class="card-body">
+                    Pengguna boleh merujuk
+                    <a href="{% url 'download_faq' file_name %}" type="button" class="btn" style="box-shadow: none; padding: 0%; background-color: white; color: blue; font-size: 1rem; margin: auto; height: 100%">
+                      <u>Panduan Pengguna PODS</u>
+                    </a>
+                  </div>
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 15. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse15" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>15. Sekiranya terdapat perubahan terhadap individu yang
+                    bertanggungjawab bagi inisiatif yang tertentu, adakah
+                    pengguna boleh mengubah maklumat diri di Menu Profil?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse15" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Pengguna perlu memaklumkan kepada wakil Pengurus Projek tentang
+                  sebarang perubahan individu yang bertanggungjawab bagi inisiatif tertentu
+                  dan pihak LAKSANA akan mengemaskini maklumat pengguna tersebut dalam
+                  PODS.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    {% elif group.name == "dq_group" %}
+    
+    <div class="container-fluid p-4">
+      <div class="card" style="min-height: 84vh;">
+          
+            <div class="card-header p-4" style="height: 10%;">
+                <h5 class="font-weight-bolder" style="">FAQ</h5>
+            </div>
+
+            <div class="card-body p-4 pt-0" style="height: 100%;">
+              
+                <div id="accordion">
+
+                    <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+                      <div class="card-header" data-toggle="collapse" href="#collapse1" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                        <a class="card-link" style="justify-content: space-between; display: flex;">
+                            
+                            <h6><b>Bagaimana mahu menghantar data?</b></h6> 
+
+                            
+                            <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                            
+                        </a>
+                      </div>
+                      <div id="collapse1" class="collapse" data-parent="#accordion">
+                        <div class="card-body">
+                          <li>Lorem ipsum..</li>
+                          <li>Lorem ipsum..</li>
+                          <li>Lorem ipsum..</li>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+                        <div class="card-header" data-toggle="collapse" href="#collapse2" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                          <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                              <h6><b>Bagaimana mahu mengesahkan data?</b></h6> 
+
+                              
+                              <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                          </a>
+                        </div>
+                        <div id="collapse2" class="collapse" data-parent="#accordion">
+                          <div class="card-body">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                          </div>
+                        </div>
+                    </div>
+                  
+                    <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+                        <div class="card-header" data-toggle="collapse" href="#collapse3" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                          <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                              <h6><b>Bagaimana mahu menukar kata laluan?</b></h6> 
+
+                              
+                              <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                          </a>
+                        </div>
+                        <div id="collapse3" class="collapse" data-parent="#accordion">
+                          <div class="card-body">
+                            <a href="https://www.w3schools.com/" target="_blank">Visit W3Schools.com!</a>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+                        <div class="card-header" data-toggle="collapse" href="#collapse4" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                          <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                              <h6><b>Bagaimana mahu menukar kata laluan?</b></h6> 
+
+                              
+                              <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                          </a>
+                        </div>
+                        <div id="collapse4" class="collapse" data-parent="#accordion">
+                          <div class="card-body">
+                            Lorem ipsum..
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+                        <div class="card-header" data-toggle="collapse" href="#collapse5" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                          <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                              <h6><b>Bagaimana mahu menukar kata laluan?</b></h6> 
+
+                              
+                              <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                          </a>
+                        </div>
+                        <div id="collapse5" class="collapse" data-parent="#accordion">
+                          <div class="card-body px-0 pt-0 pb-4">
+                            <div class="table-responsive p-0 px-3"> <!-- 500px old height to display at least 10 rows-->
+                              <table class="table align-items-center justify-content-center mb-0 table table-bordered">
+                                <thead style="text-align: center;">
+                        
+                                  <tr>                                                               
+                                    <th>Init_indeks</th>                                     
+                                    <th>Inisiatif</th>                      
+                                    <th>Nama I/A</th>                      
+                                    <th>Tarikh</th>                                         
+                                  </tr>
+
+                                </thead>
+                                <tbody style="text-align: center;">
+                                  <tr>
+                                    <td>J41_3</td>                                   
+                                    <td style="text-align: left;">MySTEP</td>                      
+                                    <td>Adam</td>                                          
+                                    <td>30/1/2023</td>  
+                                  </tr>
+                                  <tr>                                        
+                                    <td>J43_3</td>                                        
+                                    <td style="text-align: left;">SPS Lindung</td>                      
+                                    <td>Farhan</td>                                          
+                                    <td>30/1/2023</td>                    
+                                  </tr>                    
+                                  
+                                  <tr>                                        
+                                    <td>J32_3</td>                                        
+                                    <td style="text-align: left;">Jamin Kerja- Hiring Icentive</td>                      
+                                    <td>Aiman</td>                                          
+                                    <td>30/1/2023</td>                    
+                                  </tr>
+                              
+                                  <tr>                                        
+                                    <td>J31_1</td>                                        
+                                    <td style="text-align: left;">TVET (Technical and Vocational Education and Training)  - Pemerkasaan Teknikal dan Vokasional</td>                      
+                                    <td>Aiman</td>                                          
+                                    <td>30/1/2023</td>                    
+                                  </tr>
+                              
+                                  <tr>                                        
+                                    <td>J33_3</td>                                        
+                                    <td style="text-align: left;">Corridor Reskilling and Upskilling </td>                      
+                                    <td>Adam</td>                                          
+                                    <td>30/1/2023</td>                    
+                                  </tr>
+                              
+                                  <tr>                                        
+                                    <td>J34_3</td>                                        
+                                    <td style="text-align: left;">HRDCorp Reskilling and Upskilling Programmes</td>                      
+                                    <td>Adam</td>                                          
+                                    <td>30/1/2023</td>                    
+                                  </tr>
+                              
+                              
+                                </tbody>
+                              </table>
+                            </div>
+                          
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+                        <div class="card-header" data-toggle="collapse" href="#collapse6" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                          <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                              <h6><b>Bagaimana mahu menukar kata laluan?</b></h6> 
+
+                              
+                              <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                          </a>
+                        </div>
+                        <div id="collapse6" class="collapse" data-parent="#accordion">
+                          <div class="card-body">
+                            Lorem ipsum..
+                          </div>
+                        </div>
+                    </div>
+
+                </div> 
+            
+            </div>
+      </div>
+    </div>
+
+    {% elif group.name == "pid_group" %}
+
+    <div class="container-fluid p-4">
+      <div class="card" style="min-height: 84vh;">
+          
+        <div class="card-header p-4" style="height: 10%;">
+          <h5 class="font-weight-bolder">SOALAN LAZIM</h5>
+        </div>
+
+        <div class="card-body p-4 pt-0" style="height: 100%;">
+          <div id="accordion">
+            <!-- 1. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse1" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                            
+                  <h6><b>1. Apakah Portal Data LAKSANA (PODS)?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                            
+                </a>
+              </div>
+
+              <div id="collapse1" class="collapse" data-parent="#accordion">
+
+                <div class="card-body">
+                  PODS merupakan inisiatif LAKSANA bagi mewujudkan platform capaian
+                  penyerahan data antara Agensi Pelaksana dan pihak LAKSANA. Portal ini
+                  menawarkan kemudahan bagi pihak Agensi Pelaksana untuk memuat naik
+                  data dengan lebih efektif dan sistematik.
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- 2. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse2" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>2. Apakah yang harus saya lakukan jika saya terlupa kata laluan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+              
+              <div id="collapse2" class="collapse" data-parent="#accordion">
+
+                <div class="card-body">
+
+                  Jika anda terlupa kata laluan, sila klik di <a href="/password/" style="color: blue"><u>sini</u></a>.
+
+                </div>
+
+              </div>
+
+            </div>
+                  
+            <!-- 3. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse3" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>3. Apakah jenis pelayar web yang menyokong paparan PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse3" class="collapse" data-parent="#accordion">
+                
+                <div class="card-body">
+                  PODS paling sesuai dipapar menggunakan pelayar web versi terkini.
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- 4. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+            
+              <div class="card-header" data-toggle="collapse" href="#collapse4" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>4. Dimanakah saya dapat menyemak sejarah penyerahan data?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+              
+              <div id="collapse4" class="collapse" data-parent="#accordion">
+                
+                <div class="card-body">
+                  Pengguna boleh menyemak dan muat turun data yang telah dihantar di <a href="/history/" style="color: blue"><u>Sejarah Penyerahan</u></a>.
+                </div>
+
+              </div>
+
+            </div>
+
+            <!-- 5. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse5" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>5. Bagaimanakah cara-cara untuk saya menyerahkan data?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+
+              <div id="collapse5" class="collapse" data-parent="#accordion">
+                
+                
+                <div style="display: inline;">
+                    <div class="card-body">
+                      Pengguna boleh merujuk
+                      <a href="{% url 'download_faq' file_name %}" type="button" class="btn" style="box-shadow: none; padding: 0%; background-color: white; color: blue; font-size: 1rem; margin: auto; height: 100%">
+                        <u>Panduan Pengguna PODS</u>
+                      </a>
+                  </div>
+                
+                </div>
+              
+              </div>
+
+            </div>
+
+            <!-- 6. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse6" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>6. Bagaimanakah cara-cara untuk saya mengubah kata laluan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+
+              <div id="collapse6" class="collapse" data-parent="#accordion">
+                <div class="card-body">
+                  Jika anda mahu menukar kata laluan, sila ikuti langkah seperti yang di bawah:
+                  <br>
+                  <br>
+                  1. Klik pada halaman Profil.
+                  <br>
+                  2. Klik butang "Tukar Kata Laluan".
+                  <br>
+                  3. Isikan kata laluan sekarang dan kata laluan baru.
+                  <br>
+                  4. Klik butang "Simpan" untuk menukar kata laluan lama kepada kata laluan yang baru.
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 7. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse7" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>7. Berapakah had saiz fail yang dibenarkan oleh PODS untuk dimuat naik?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse7" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Saiz optimum fail untuk dimuat naik ke dalam PODS adalah sehingga 5mb.
+                  Sekiranya fail yang dihantar melebihi 5mb, masa pemprosesan data mungkin akan
+                  melebihi 3 minit.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 8. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse8" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>8. Apakah jenis format fail yang boleh diterima oleh PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse8" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  PODS menerima fail dalam format .xlsx, .xls, .csv dan .txt.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 9. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse9" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>9. Dimanakah saya boleh melihat maklumat diri pengguna dan menukar kata laluan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse9" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Pengguna boleh melihat maklumat diri seperti nama, nombor telefon, e-mel, lokasi dan menukar kata laluan di <a href="/profile/" style="color: blue"><u>Menu Profil</u></a>.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 10. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse10" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>10. Saluran manakah yang patut dihubungi jika saya mempunyai sebarang persoalan dan masalah mengenai inisiatif dan PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse10" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Pengguna boleh menghubungi wakil Pengurus Projek LAKSANA sekiranya pengguna mempunyai sebarang persoalan dan masalah berkaitan inisiatif dan PODS.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 11. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse11" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>11. Mengapakah mesej “Nama Pengguna/Kata Laluan Salah”
+                    dipaparkan apabila saya cuba log masuk walaupun saya telah
+                    menggunakan Nama Pengguna dan Kata Laluan yang telah
+                    diberikan oleh pihak LAKSANA?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse11" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Jika pengguna menerima mesej ini, kemungkinan pengguna lupa kata laluan atau nama pengguna/kata laluan pengguna tidak didaftar. Pengguna hendaklah menghubungi wakil Pengurus Projek bagi tujuan melengkapkan pendaftaran nama pengguna dan kata laluan.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 12. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse12" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>12. Berapakah tempoh sah nama pengguna untuk PODS?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse12" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Nama pengguna dan kata laluan akan kekal sah selagi inisiatif masih aktif.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 13. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse13" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>13. Berapa banyak nama pengguna dan kata laluan akan diterima bagi setiap Agensi Pelaksana?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse13" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Setiap Ketua Agensi Pelaksana akan diberikan satu nama pengguna dan kata laluan, manakala setiap individu yang bertanggungjawab dalam setiap inisiatif akan diberikan nama pengguna dan kata laluan bagi tujuan penyerahan data.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 14. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse14" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>14. Jika fail dan data saya mempunyai ralat, apakah yang perlu saya lakukan?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse14" class="collapse" data-parent="#accordion">
+                          
+                <div style="display: inline;">
+                  <div class="card-body">
+                    Pengguna boleh merujuk
+                    <a href="{% url 'download_faq' file_name %}" type="button" class="btn" style="box-shadow: none; padding: 0%; background-color: white; color: blue; font-size: 1rem; margin: auto; height: 100%">
+                      <u>Panduan Pengguna PODS</u>
+                    </a>
+                  </div>
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            <!-- 15. -->
+            <div class="card" style="background-color: white; box-shadow: none;  border-color: lightgray; border-width: 1px; border-radius: 5px; margin-bottom: 10px;">
+              
+              <div class="card-header" data-toggle="collapse" href="#collapse15" style="background-color: #F7F7F7;  border-color: lightgray; border-width: 1px; border-radius: 5px;">
+                
+                <a class="card-link" style="justify-content: space-between; display: flex;">
+                              
+                  <h6><b>15. Sekiranya terdapat perubahan terhadap individu yang
+                    bertanggungjawab bagi inisiatif yang tertentu, adakah
+                    pengguna boleh mengubah maklumat diri di Menu Profil?</b></h6> 
+
+                  <i class='fas fa-angle-down' style='font-size:24px; color: black;'></i>
+                              
+                </a>
+
+              </div>
+                        
+              <div id="collapse15" class="collapse" data-parent="#accordion">
+                          
+                <div class="card-body">
+                  Pengguna perlu memaklumkan kepada wakil Pengurus Projek tentang
+                  sebarang perubahan individu yang bertanggungjawab bagi inisiatif tertentu
+                  dan pihak LAKSANA akan mengemaskini maklumat pengguna tersebut dalam
+                  PODS.
+                </div>
+                        
+              </div>
+            
+            </div>
+
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  {% endif %}
+{% endfor %} 
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="/static/assets/js/plugins/chartjs.min.js"></script>
+  <script src="/static/assets/js/plugins/Chart.extension.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock javascripts %}

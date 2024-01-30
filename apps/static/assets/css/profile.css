@@ -1,0 +1,48 @@
+body{
+
+    margin-top: 20px;
+
+    background-color: grey;
+
+}
+
+
+
+.main{
+
+    padding: 10px;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+
+
+}
+
+.container-fluid{
+
+    position: absolute;
+
+    border-radius: 10px;
+
+}
+
+.card{
+
+    position:absolute;
+    width: 500PX;
+    height: 500px;
+    top: 222px;
+    background: white;
+    border-radius: 10px;
+    padding-left: 10px;
+    right: 300px;
+
+}
+
+.marginauto {
+    margin: 70px auto 20px;
+    display: block;
+    border-radius: 10px;
+    position: center;
+}
+

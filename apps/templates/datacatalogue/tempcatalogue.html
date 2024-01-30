@@ -1,0 +1,450 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="card" style="min-height: 85vh">
+        <div class="card-header" style="height: 10%; ">
+            <div class="row">
+                <div class="col">
+                    <h5>
+                        <b>
+                            Kempen Beli Barangan Malaysia
+                        </b>
+                    </h5>
+                </div>
+            
+            </div>
+        </div>
+        <div class="card-body pt-0" style="height: 100%;">
+            <!-- <div class="table-responsive" style="min-height: 66vh;" >
+                <table class="table align-items-center mb-0 table table-bordered" style=" color: black; text-align: center;">
+                    <thead style="background-color: lightgray;">
+                        <tr>
+                            <th style="width: 15%;">Elemen Data</th>
+                            <th style="width: 75%;">Penerangan</th>
+                            <th style="width: 10%;">Inisiatif Berkaitan</th>
+                            
+                        </tr>
+                    </thead>
+  
+                    <tbody>
+                        <tr>
+                            <td>agensi_pelaksana</td>
+                            <td>Nama bagi agensi yang melaksanakan inisiatif</td>
+                            <td>
+                                <a href="{% url 'initcatalogue' %}">
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>alamat_entiti_1</td>
+                            <td>Alamat entiti untuk baris yang pertama</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>alamat_entiti_2</td>
+                            <td>Alamat entiti untuk baris yang kedua</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>alamat_ind_1</td>
+                            <td>Alamat individu untuk baris yang pertama</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>alamat_ind_2</td>
+                            <td>Alamat individu untuk baris yang kedua</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>alamat_program_1</td>
+                            <td>Alamat program untuk baris yang pertama</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr> 
+                        <tr>
+                            <td>alamat_program_2</td>
+                            <td>Alamat program untuk baris yang kedua</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>alasan_ditolak</td>
+                            <td>Alasan suatu permohonan ditolak</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>bandar_entiti</td>
+                            <td>Nama bandar asal bagi suatu entiti</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>bandar_ind</td>
+                            <td>Nama bandar asal bagi seseorang individu</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        <tr>
+                            <td>bandar_program</td>
+                            <td>Nama bandar sesebuah program diadakan</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr> 
+                        <tr>
+                            <td>bangsa_ind</td>
+                            <td>Nama bangsa bagi seseorang individu</td>	
+                            <td>
+                                <a>
+                                    <i class='fas fa-search' style='font-size:24px'></i>
+                                </a>
+                            </td>	
+                        </tr>
+                        
+                    </tbody>
+
+                </table>
+            
+            </div> -->
+
+            <div class="card" style="border-width: 1px; background-color: rgba(226, 237, 253, 0.274)">
+                <div class="card-body">
+                    <div>
+                        <div class="flex flex-col items-start gap-2 pb-0 lg:flex-row lg:items-center lg:justify-between">
+                            <h5><b>METADATA</b></h5>
+                        </div>
+                    </div>
+                
+                <!-- <section  style="margin-top: 30px;">
+                    <div>
+                       <h6>Penerangan Inisiatif</h6> 
+                    </div>
+                    <div>
+                        Kempen Beli Barangan Malaysia (KBBM) adalah bertujuan untuk memartabatkan barangan Malaysia disamping memperkukuhkan perbelanjaan domestik dengan menggalakkan para pengguna di negara ini membeli barangan buatan Malaysia.
+                        KBBM juga merupakan sebuah inisiatif yang akan membantu pengusaha tempatan dalam memasarkan produk dan perkhidmatan mereka dan memainkan peranan penting dalam pembangunan ekonomi negara.
+                        Langkah Kerajaan untuk memperkasa dan melaksanakan KBBM adalah bertepatan dan sangat signifikan bagi mengimbangi cabaran dan tekanan globalisasi ekonomi semasa khususnya untuk merancakkan dan merangsang pertumbuhan ekonomi domestik melalui peningkatan pembelian dan penggunaan produk atau perkhidmatan tempatan (domestic consumption).
+                    </div>
+                </section> -->
+
+                <section style="margin-top: 30px;">
+                    <div>
+                       <h6>Definisi Pembolehubah Templat</h6> 
+                    </div>
+                    <div class="table-responsive" style="margin-top: 10px;">
+                        <table class="table mb-0" style="overflow: hidden; border-color: black;">
+                            <thead >
+                            <tr style="border-bottom: 1px;">
+                                <th style="text-align: left; width: 20%;">Nama Pembolehubah</th>
+                                <th style="text-align: left; width: 15%;">Jenis Data</th>
+                                <th style="text-align: left; width: 45%;">Definisi</th> 
+                                <th style="text-align: left; width: 20%;">Contoh Data</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                <td style="padding-left:1.5rem;">reporting_date</td>
+                                <td style="padding-left:1.5rem;">date</td>
+                                <td style="padding-left:1.5rem;">Tarikh inisiatif dilaporkan, dalam format YYYY-MM-DD</td>
+                                <td style="padding-left:1.5rem;">2022-09-01</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">implementing_agency</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nama bagi agensi yang melaksanakan inisiatif</td>
+                                <td style="padding-left:1.5rem;">JHEV</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">subinitiative</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Pecahan sub inisiatif di bawah inisiatif utama</td>
+                                <td style="padding-left:1.5rem;">J103_1</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">no</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nombor indeks bagi kategori utama</td>
+                                <td style="padding-left:1.5rem;"></td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">main_category</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nama kategori utama bagi inisiatif atau program</td>
+                                <td style="padding-left:1.5rem;"></td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">ecommerce_platform</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Platform E-dagang yang terlibat</td>
+                                <td style="padding-left:1.5rem;">SHOPEE</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_name</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nama pendaftaran perniagaan</td>
+                                <td style="padding-left:1.5rem;"></td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_old_brn</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nombor pendaftaran perniagaan yang lama</td>
+                                <td style="padding-left:1.5rem;">2.01912E+11</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_new_brn</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nombor pendaftaran perniagaan yang baru</td>
+                                <td style="padding-left:1.5rem;">2.01912E+11</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_state</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Negeri Perniagaan</td>
+                                <td style="padding-left:1.5rem;">WP KUALA LUMPUR</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_revenue</td>
+                                <td style="padding-left:1.5rem;">decimal</td>
+                                <td style="padding-left:1.5rem;">Pendapatan Perniagaan</td>
+                                <td style="padding-left:1.5rem;">1000000.00</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_ownership_type</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Jenis pemilikan sesebuah perniagaan</td>
+                                <td style="padding-left:1.5rem;"></td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_msian_owned</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Menentukan pemilik perniagaan adalah rakyat Malaysia atau tidak</td>
+                                <td style="padding-left:1.5rem;"></td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_bumiputera_status</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">NMenentukan pemilik perniagaan adalah Bumiputera atau tidak</td>
+                                <td style="padding-left:1.5rem;">BUMIPUTERA</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_size</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Saiz sesebuah perniagaan</td>
+                                <td style="padding-left:1.5rem;">MIKRO</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_sector</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nama sektor bagi sesebuah perniagaan</td>
+                                <td style="padding-left:1.5rem;">SUKAN</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_add_1</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Baris pertama alamat perniagaan</td>
+                                <td style="padding-left:1.5rem;">55, JALAN PERMAI 8</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_add_2</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Baris kedua alamat perniagaan</td>
+                                <td style="padding-left:1.5rem;">TAMAN SENTOSA</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_city</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Nama bandar sesebuah perniagaan didaftarkan</td>
+                                <td style="padding-left:1.5rem;">BERA</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">biz_postcode</td>
+                                <td style="padding-left:1.5rem;">int</td>
+                                <td style="padding-left:1.5rem;">Nombor poskod sesebuah perniagaan didaftarkan</td>
+                                <td style="padding-left:1.5rem;">28000</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">application_date</td>
+                                <td style="padding-left:1.5rem;">date</td>
+                                <td style="padding-left:1.5rem;">Tarikh terakhir aplikasi, dalam format YYYY-MM-DD</td>
+                                <td style="padding-left:1.5rem;">2022-09-01</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">application_amount</td>
+                                <td style="padding-left:1.5rem;">decimal</td>
+                                <td style="padding-left:1.5rem;">Jumlah keseluruhan (RM) sesebuah perniagaan aplikasi</td>
+                                <td style="padding-left:1.5rem;">100000.00</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">rejected_date</td>
+                                <td style="padding-left:1.5rem;">date</td>
+                                <td style="padding-left:1.5rem;">Tarikh terakhir ditolak, dalam format YYYY-MM-DD</td>
+                                <td style="padding-left:1.5rem;">2022-09-05</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">rejected_amount</td>
+                                <td style="padding-left:1.5rem;">decimal</td>
+                                <td style="padding-left:1.5rem;">Jumlah keseluruhan (RM) sesebuah perniagaan ditolak</td>
+                                <td style="padding-left:1.5rem;">100000.00</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">rejected_reason</td>
+                                <td style="padding-left:1.5rem;">varchar</td>
+                                <td style="padding-left:1.5rem;">Alasan aplikasi sesebuah perniagaan ditolak</td>
+                                <td style="padding-left:1.5rem;"></td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">approved_date</td>
+                                <td style="padding-left:1.5rem;">date</td>
+                                <td style="padding-left:1.5rem;">Tarikh terakhir diluluskan, dalam format YYYY-MM-DD</td>
+                                <td style="padding-left:1.5rem;">2022-09-05</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">approved_amount</td>
+                                <td style="padding-left:1.5rem;">decimal</td>
+                                <td style="padding-left:1.5rem;">Jumlah keseluruhan (RM) sesebuah perniagaan yang diluluskan</td>
+                                <td style="padding-left:1.5rem;">20000.00</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">disbursed_date</td>
+                                <td style="padding-left:1.5rem;">date</td>
+                                <td style="padding-left:1.5rem;">Tarikh terakhir pengeluaran, dalam format YYYY-MM-DD</td>
+                                <td style="padding-left:1.5rem;">2022-09-05</td>
+                            </tbody>
+
+                            <tbody>
+                                <td style="padding-left:1.5rem;">disbursed_amount</td>
+                                <td style="padding-left:1.5rem;">decimal</td>
+                                <td style="padding-left:1.5rem;">Jumlah keseluruhan (RM) penegluaran sesebuah perniagaan yang diluluskan</td>
+                                <td style="padding-left:1.5rem;">20000.00</td>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </section>
+
+                <section  style="margin-top: 30px;">
+                    <div>
+                       <h6>Dikemaskini pada</h6> 
+                    </div>
+                    <div>
+                        3 Mac 2023
+                    </div>
+                </section>
+
+                <section  style="margin-top: 30px;">
+                    <div>
+                       <h6>Sumber Data</h6> 
+                    </div>
+                    <div>
+                        KPDNHEP
+                    </div>
+                </section>
+
+                <section  style="margin-top: 30px;">
+                    <div>
+                        <h6>Templat dataset</h6> 
+                    </div>
+                    <div>
+                        <a class="text-primary underline hover:no-underline">
+                            <u><b>MUAT TURUN</b></u>
+                        </a> 
+                    </div>
+                    
+                </section>
+
+                <section  style="margin-top: 30px;">
+                    <div>
+                        <h6>Akses Data</h6> 
+                    </div>
+                    <div>
+                        <a class="text-primary underline hover:no-underline">
+                            <u><b>MOHON AKSES DATA</b></u>
+                        </a> 
+                    </div>
+                    
+                </section>
+
+                </div>
+            </div>
+
+        </div> 
+        
+        
+    </div>
+                
+</div>
+    
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+{% endblock javascripts %}

@@ -1,0 +1,773 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+  <link rel="stylesheet" href="/static/assets/css/table.css">
+  <!-- <link href="/DataTables/datatables.css"> -->
+
+
+  <style>
+
+  tr { height: 5.75vh; }
+
+  </style>
+
+{% endblock stylesheets %}
+
+
+
+{% block content %}
+{% for group in user.groups.all %}
+  {% if group.name == "ia_group"%}
+  <div class="container-fluid py-4">
+    <div class="card" style="min-height:10vh">
+      <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+        <div style="min-height: 10vh;">
+
+          <table id="table" class="display nowrap cell-border" style="width:100%; color: black;">
+            <thead>
+              <tr>
+                <th><b>No. </b></th>
+                <th><b>Senarai Inisiatif <b></th>
+                <th><b>Tarikh Dimuat Naik <b></th>
+                <th><b>Fail Diterima <b></th>
+                <th><b>Fail Tidak Diterima <b></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for init_name, timestamp_str, download_new_accept, download_new_reject in items_ia %}
+              <tr>
+                <td></td>
+                <td>{{init_name}}</td>
+                <td>{{timestamp_str}}</td>
+
+                <td>
+                  {% if download_new_accept == 'TELAH TAMAT TEMPOH' %}
+                  <i>TELAH TAMAT TEMPOH</i>
+                  {% elif download_new_accept == '' %}
+                  <i>TIADA DATA</i>
+                  {% else %}
+                  <form method="POST" action="{% url 'downloadfile_accepted' %}" style="box-shadow: none; float: center; text-align: center;">
+                    {% csrf_token %}
+                    <input type="text" name="file" value="{{ download_new_accept }}" hidden>
+                      <button type="submit" style="box-shadow: none; padding: 0%; border: 0px; background-color: transparent; color: blue;">
+                        <b><u>Muat Turun</u></b>
+                      </button>
+                  </form>
+                  {% endif %}
+                </td>
+                
+                <td>
+                  {% if download_new_reject == 'TELAH TAMAT TEMPOH' %}
+                  <i>TELAH TAMAT TEMPOH</i>
+                  {% elif download_new_reject == '' %}
+                  <i>TIADA DATA</i>
+                  {% else %}
+                  <form method="POST" action="{% url 'downloadfile_rejected' %}" style="box-shadow: none; float: center; text-align: center;">
+                    {% csrf_token %}
+                    <input type="text" name="file" value="{{ download_new_reject }}" hidden>
+                      <button type="submit" style="box-shadow: none; padding: 0%; border: 0px; background-color: transparent; color: blue;">
+                        <b><u>Muat Turun</u></b>
+                      </button>
+                  </form>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% elif group.name == "pid_group" %}
+  <div class="container-fluid py-4">
+    <div class="card" style="min-height:10vh">
+      <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+        <div style="min-height: 10vh;">
+
+          <table id="table2" class="display nowrap cell-border" style="width:100%; color: black;">
+            <thead>
+              <tr>
+                <th><b>No. </b></th>
+                <th><b>Indeks Data <b></th>
+                <th><b>Inisiatif <b></th>
+                <th><b>Nama Pegawai <b></th>
+                <th style="text-align: center;"><b>Tarikh <b></th>
+                <th><b>Fail Diterima <b></th>
+                <th><b>Fail Tidak Diterima <b></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for subinit_id, init_name, user_full_name, timestamp_str, download_new_accept, download_new_reject in items_pid %}
+              <tr>
+                <td></td>
+                <td>{{subinit_id}}</td>
+                <td>{{init_name}}</td>
+                <td>{{user_full_name}}</td>
+                <td>{{timestamp_str}}</td>
+                <td>
+                  {% if download_new_accept == 'TELAH TAMAT TEMPOH' %}
+                  <i>TELAH TAMAT TEMPOH</i>
+                  {% elif download_new_accept == '' %}
+                  <i>TIADA DATA</i>
+                  {% else %}
+                  <form method="POST" action="{% url 'downloadfile_accepted' %}" style="box-shadow: none; float: center; text-align: center;">
+                    {% csrf_token %}
+                    <input type="text" name="file" value="{{ download_new_accept }}" hidden>
+                      <button type="submit" style="box-shadow: none; padding: 0%; border: 0px; background-color: transparent; color: blue;">
+                        <b><u>Muat Turun</u></b>
+                      </button>
+                  </form>
+                  {% endif %}
+                </td>
+                
+                <td>
+                  {% if download_new_reject == 'TELAH TAMAT TEMPOH' %}
+                  <i>TELAH TAMAT TEMPOH</i>
+                  {% elif download_new_reject == '' %}
+                  <i>TIADA DATA</i>
+                  {% else %}
+                  <form method="POST" action="{% url 'downloadfile_rejected' %}" style="box-shadow: none; float: center; text-align: center;">
+                    {% csrf_token %}
+                    <input type="text" name="file" value="{{ download_new_reject }}" hidden>
+                      <button type="submit" style="box-shadow: none; padding: 0%; border: 0px; background-color: transparent; color: blue;">
+                        <b><u>Muat Turun</u></b>
+                      </button>
+                  </form>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% elif group.name == "dq_group" %}
+  
+  <div class="container-fluid py-4" style="height: 85vh;">
+    <div class="row" style="height: 85vh">
+      <div class="col-lg-9" style="height: 100%;">
+        <div class="row" style="width: auto; height: 15%">
+          <div class="col-lg-6" style="height: 100%; flex: auto;">
+            <div class="card mb-4" style="height: 90%">
+                <div class="card-header px-4 pb-0" style="margin: 0%; height: 50%;">
+                  <h5 class="font-weight-bolder">JUMLAH FAIL YANG DIMUATNAIK</h5>
+                </div>
+                <div class="card-body px-4 pt-1" style="height: 50%;">
+                  <h5>{{count_file}}</h5>
+                </div>
+            </div>
+          </div>
+  
+          <div class="col-lg-6" style="height: 100%; flex: auto;">
+            <div class="card mb-4" style="height: 90%">
+              <div class="card-header px-4 pb-0" style="margin: 0%; height: 50%; overflow: hidden;">
+                <h5 class="font-weight-bolder" >JUMLAH NILAI YANG TIDAK DAPAT DIKENAL PASTI</h5>
+              </div>
+              <div class="card-body px-4 pt-1" style="height: 50%;">
+                <h5>{{colCountTotal}}</h5>
+              </div> 
+            </div>
+          </div>  
+        </div>
+
+        <div class="row" style="width: auto; height: 85%;">
+          <div class="col-md-12 mb-lg-0" style="height: 100%;">
+  
+              <div class="card" style="height:100%">
+                      <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%; height: 90%">
+                        <div style="height: 100%;">
+                          
+                          <!-- <table class="table align-items-center mb-0 table table-bordered" style=" color: black; text-align: center;"> -->
+                          <table id="table3" class="display nowrap cell-border" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>No. </th>
+                                    <th>Tarikh Dimuat Naik </th>
+                                    <th>Senarai ID Inisiatif </th>
+                                    <th>Senarai Inisiatif </th>
+                                    <th>Sektor </th>
+                                    <th>Nama Agensi </th>
+                                    <th>Nama Penyerah </th>
+                                    <th>PIC </th>
+                                    <th>Fail Diterima </th>
+                                    <th>Fail Tidak Diterima </th>
+                                </tr>
+                            </thead>
+                              
+                            <tbody>
+                              {% for timestamp_str, subinit_id, init_name, sector, agency_name, user_full_name, users_pic, download_new_accept, download_new_reject in items_dq %}
+                              <tr style="height: 5vh">
+                                <td></td>
+                                <td>{{timestamp_str}}</td>
+                                <td>{{subinit_id}}</td>  
+                                <td>{{init_name}}</td>  
+                                <td>{{sector}}</td>  
+                                <td>{{agency_name}}</td>  
+                                <td>{{user_full_name}}</td>
+                                <td>{{users_pic}}</td>
+                                <td>
+                                  {% if download_new_accept == 'TELAH TAMAT TEMPOH' %}
+                                  <i>TELAH TAMAT TEMPOH</i>
+                                  {% elif download_new_accept == '' %}
+                                  <i>TIADA DATA</i>
+                                  {% else %}
+                                  <form method="POST" action="{% url 'downloadfile_accepted' %}" style="box-shadow: none; float: center; text-align: center;">
+                                    {% csrf_token %}
+                                    <input type="text" name="file" value="{{ download_new_accept }}" hidden>
+                                      <button type="submit" style="box-shadow: none; padding: 0%; border: 0px; background-color: transparent; color: blue;">
+                                        <b><u>Muat Turun</u></b>
+                                      </button>
+                                  </form>
+                                  {% endif %}
+                                </td>
+
+                                <td>
+                                  {% if download_new_reject == 'TELAH TAMAT TEMPOH' %}
+                                  <i>TELAH TAMAT TEMPOH</i>
+                                  {% elif download_new_reject == '' %}
+                                  <i>TIADA DATA</i>
+                                  {% else %}
+                                  <form method="POST" action="{% url 'downloadfile_rejected' %}" style="box-shadow: none; float: center; text-align: center;">
+                                    {% csrf_token %}
+                                    <input type="text" name="file" value="{{ download_new_reject }}" hidden>
+                                      <button type="submit" style="box-shadow: none; padding: 0%; border: 0px; background-color: transparent; color: blue;">
+                                        <b><u>Muat Turun</u></b>
+                                      </button>
+                                  </form>
+                                  {% endif %}
+                                </td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>      
+                        </div>
+                  </div>
+              </div>
+          </div>
+        </div>  
+      </div>
+  
+      <div class="col-lg-3" style="height: 100%;">
+        <div class="card" style="height: 100%; flex: auto;">
+          <div class="card-header" style="height: 7.5%;">
+            <h5 class="font-weight-bolder" style="margin-bottom: 20px;">NILAI YANG TIDAK DAPAT DIKENAL PASTI</h5>
+          </div>
+          <div class="card-body p-4" style="height: 92.5%;">
+            <div class="table-responsive p-0" style="height: 100%;">
+              <table>
+                {% for gender in col_gender %}
+                <div class="row" style="width: 100%; margin: 0%;">
+                  <div class="card" style="margin-top: 10px; height: 50px; background-color: #F9F6EE; box-shadow: none;">      
+                    <a style="padding: 14px; overflow: hidden;">
+                        jantina_ind: {{gender}}
+                    </a>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for race in col_race %}
+                <div class="row" style="width: 100%; margin: 0%;">
+                  <div class="card" style="margin-top: 10px; height: 50px; background-color: #F9F6EE; box-shadow: none;">      
+                    <a style="padding: 14px; overflow: hidden;">
+                      bangsa_ind: {{race}}
+                    </a>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for state in col_state %}
+                <div class="row" style="width: 100%; margin: 0%;">
+                  <div class="card" style="margin-top: 10px; height: 50px; background-color: #F9F6EE; box-shadow: none;">      
+                    <a style="padding: 14px; overflow: hidden;">
+                      negeri_ind/negeri/negeri_entiti: {{state}}
+                    </a>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for biz_own in col_biz_ownership_type %}
+                <div class="row" style="width: 100%; margin: 0%;">
+                  <div class="card" style="margin-top: 10px; height: 50px; background-color: #F9F6EE; box-shadow: none;">      
+                    <a style="padding: 14px; overflow: hidden;">
+                      jenis_entiti: {{biz_own}}
+                    </a>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for bumi in col_bumi_status %}
+                <div class="row" style="width: 100%; margin: 0%;">
+                  <div class="card" style="margin-top: 10px; height: 50px; background-color: #F9F6EE; box-shadow: none;">      
+                    <a style="padding: 14px; overflow: hidden;">
+                      status_bumiputera_entiti: {{bumi}}
+                    </a>
+                  </div>
+                </div>
+                {% endfor %}
+
+                {% for sector in col_biz_sector %}
+                <div class="row" style="width: 100%; margin: 0%;">
+                  <div class="card" style="margin-top: 10px; height: 50px; background-color: #F9F6EE; box-shadow: none;">      
+                    <a style="padding: 14px; overflow: hidden;">
+                      sektor_entiti: {{sector}}
+                    </a>
+                  </div>
+                </div>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+{% endfor %} 
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="/static/assets/js/plugins/chartjs.min.js"></script>
+  <script src="/static/assets/js/plugins/Chart.extension.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+
+  <script>
+
+    //IA Table Setup
+
+    $(document).ready(function () {
+        var table = $('#table').DataTable({
+            
+            //Search Filter
+            columnDefs: [
+                {
+                    searchable: false,
+                    orderable: false,
+                    targets: [0],
+                },
+
+                //Text Align Center
+                { className: 'text-center', targets: [0,2,3,4] },
+            ],
+            // order: [[2, 'desc']],
+            order: [],
+
+            scrollX: "100%",
+            scrollY: false,
+
+            // "scrollCollapse": true,
+
+            "columns": [
+              { "width": "5%" },
+              null,
+              { "width": "15%" },
+              { "width": "10%" },
+              { "width": "10%" },
+            ],
+
+            //Higlight Search
+            mark: true,
+
+            //Buttons and Tables Positioning
+            dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+            //Buttons features and css
+            buttons: [
+                {
+                    text: 'SEJARAH PENYERAHAN',
+                    className: 'btn btn-default btn-sm-add',
+
+                    action: false,
+                    
+                }
+            ],
+
+            scrollCollapse: true,
+            // paging: false,
+
+            // Labelling
+            language: {
+                "search": "",
+                "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                // "info": "Menunjukkan _TOTAL_ data",
+                "zeroRecords": "Tiada rekod ditemui",
+                // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+                "infoEmpty":      "Menunjukkan 0 hasil carian",
+                "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                "thousands": "'",
+                "decimal": ".",
+                "paginate": {
+                        "previous": "<",
+                        "next": ">"
+                        },
+            },
+
+
+            // Filter Column Selection
+            initComplete: function () {
+                this.api()
+                    
+                    .columns([1])
+                    .every(function () {
+                        var column = this;
+                        
+                        
+                        var table = $('#example').DataTable();
+                        table.columns.adjust().draw();
+                        
+
+                        var select = $('<select><option value=""></option></select>')
+                            
+                            .css( {'margin-left': '10px', 'height':'30px'} )
+                            .appendTo( $(column.header()) )
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+                            $( select ).click( function(e) {
+                            e.stopPropagation();
+                            });
+                            
+                            
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                            });
+                            
+                        
+                    });
+
+                
+                    
+            },
+
+            
+        });
+    
+
+        //Index numbering
+        table.on('order.dt search.dt', function () {
+            let i = 1;
+    
+            table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                this.data(i++);
+            });
+        }).draw();
+
+        
+        // $('[type=search]').each(function () {
+        //         // $(this).attr("placeholder", "Search...");
+        //         $(this).after('<span class="fa fa-search"></span>');
+        //     });
+    }
+    
+    
+    );
+
+    //PID Table Setup
+
+    $(document).ready(function () {
+        var table2 = $('#table2').DataTable({
+            
+            //Search Filter
+            columnDefs: [
+                {
+                    searchable: false,
+                    orderable: false,
+                    targets: [0,5,6],
+                },
+
+                //Text Align Center
+                { className: 'text-center', targets: [0,1,5,6] },
+            ],
+            // order: [[1, 'desc']],
+            order: [],
+
+            scrollX: "100%",
+
+            //Higlight Search
+            mark: true,
+
+            //Buttons and Tables Positioning
+            dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+            //Buttons features and css
+            buttons: [
+                {
+                    text: 'SEJARAH PENYERAHAN',
+                    className: 'btn btn-default btn-sm-add',
+
+                    action: false,
+                }
+            ],
+
+            scrollCollapse: true,
+
+            fixedColumns:{
+                    heightMatch: 'none',
+                },
+            // paging: false,
+
+            // Labelling
+            language: {
+                "search": "",
+                "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                "zeroRecords": "Tiada rekod ditemui",
+                // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+                "infoEmpty":      "Menunjukkan 0 hasil carian",
+                "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                "thousands": "'",
+                "decimal": ".",
+                'paginate': {
+                        'previous': '<',
+                        'next': '>'
+                        },
+            },
+
+
+            // Filter Column Selection
+            initComplete: function () {
+                this.api()
+                    
+                    .columns([1,2,3])
+                    .every(function () {
+                        var column = this;
+                        
+                        
+                        var table2 = $('#example').DataTable();
+                        table2.columns.adjust().draw();
+                        
+
+                        var select = $('<select><option value=""></option></select>')
+                            
+                            .css( {'margin-left': '10px', 'height':'30px'} )
+                            .appendTo( $(column.header()) )
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+                            $( select ).click( function(e) {
+                            e.stopPropagation();
+                            });
+                            
+                            
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                            });
+                            
+                        
+                    });
+
+                
+                    
+            },
+
+            
+        });
+    
+
+        //Index numbering
+        table2.on('order.dt search.dt', function () {
+            let i = 1;
+    
+            table2.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                this.data(i++);
+            });
+        }).draw();
+
+        // $('.dataTables_filter input[type="search"]').css(
+        //     {'width':'40vh','display':'inline-block','height':'30px'}
+        // );
+
+        // $('.dataTables_buttons').css(
+        //     {'width':'40vh','display':'inline-block','height':'30px'}
+        // );
+        // $('#table thead th').css('background-color', 'blue');
+
+        // $('[type=search]').each(function () {
+        //         // $(this).attr("placeholder", "Search...");
+        //         $(this).after('<span class="fa fa-search"></span>');
+        //     });
+        
+    }
+    
+    
+    );
+
+    //DQ Table Setup
+
+    $(document).ready(function () {
+      var table3 = $('#table3').DataTable({
+          
+          //Search Filter
+          columnDefs: [
+              {
+                  searchable: false,
+                  orderable: false,
+                  targets: [0],
+              },
+
+              //Text Align Center
+              { className: 'text-center', targets: [0,1,2,4,5,6,7,8,9] },
+          ],
+          // order: [[1, 'desc']],
+          order: [],
+
+          scrollX: "100%",
+
+          //Higlight Search
+          mark: true,
+
+          //Buttons and Tables Positioning
+          dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                  "<'row'<'col-sm-12'tr>>" +
+                  "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+          //Buttons features and css
+          buttons: [
+              {
+                  text: 'SEJARAH PENYERAHAN',
+                  className: 'btn btn-default btn-sm-add',
+
+                  action: false,
+              }
+          ],
+
+          scrollCollapse: true,
+
+          fixedColumns:{
+                  heightMatch: 'none',
+              },
+          // paging: false,
+
+          // Labelling
+          language: {
+              "search": "",
+              "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+              "zeroRecords": "Tiada rekod ditemui",
+              // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+              "infoEmpty":      "Menunjukkan 0 hasil carian",
+              "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+              "thousands": "'",
+              "decimal": ".",
+              'paginate': {
+                      'previous': '<',
+                      'next': '>'
+                      },
+          },
+
+
+          // Filter Column Selection
+          initComplete: function () {
+              this.api()
+                  
+                  .columns([1,2,3,4,5,6,7])
+                  .every(function () {
+                      var column = this;
+                      
+                      
+                      var table3 = $('#example').DataTable();
+                      table3.columns.adjust().draw();
+                      
+
+                      var select = $('<select><option value=""></option></select>')
+                          
+                          .css( {'margin-left': '10px', 'height':'30px'} )
+                          .appendTo( $(column.header()) )
+                          .on('change', function () {
+                              var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                              column.search(val ? '^' + val + '$' : '', true, false).draw();
+                          });
+                          $( select ).click( function(e) {
+                          e.stopPropagation();
+                          });
+                          
+                          
+                      column
+                          .data()
+                          .unique()
+                          .sort()
+                          .each(function (d, j) {
+                              select.append('<option value="' + d + '">' + d + '</option>');
+                          });
+                          
+                      
+                  });
+
+              
+                  
+          },
+
+          
+      });
+  
+
+      //Index numbering
+      table3.on('order.dt search.dt', function () {
+          let i = 1;
+  
+          table3.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+              this.data(i++);
+          });
+      }).draw();
+
+      // $('.dataTables_filter input[type="search"]').css(
+      //     {'width':'40vh','display':'inline-block','height':'30px'}
+      // );
+
+      // $('.dataTables_buttons').css(
+      //     {'width':'40vh','display':'inline-block','height':'30px'}
+      // );
+      // $('#table thead th').css('background-color', 'blue');
+
+      // $('[type=search]').each(function () {
+      //         // $(this).attr("placeholder", "Search...");
+      //         $(this).after('<span class="fa fa-search"></span>');
+      //     });
+      
+  }
+  
+  
+  );
+
+    
+    
+  </script>
+
+{% endblock javascripts %}

@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+<link rel="stylesheet" href="/static/assets/css/table.css">
+
+<!-- <link href="/DataTables/datatables.css"> -->
+<style>
+
+
+
+iframe {
+  /*height: 50vh; */
+  height: 81.5vh;
+  /* height: 105vh; */
+  width: 100%;
+  overflow: hidden;
+}
+ 
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+  <div class="card" style="min-height:10vh">
+    <div class="card-body p-2" style="height: 100%;">
+      <div style="min-height: 10vh; ">
+        <iframe src="{{ superset_url }}"></iframe>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+{% block javascripts %}
+  
+<script src="/static/assets/js/plugins/chartjs.min.js"></script>
+<script src="/static/assets/js/plugins/Chart.extension.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+{% endblock javascripts %}  

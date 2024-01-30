@@ -1,0 +1,80 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="card my-4" style="height: 85vh; align-items: center; margin: 26px;">
+    
+    <div class="card" style="margin: auto; background-color: transparent; box-shadow: none;">
+        <div class="card" style="background-color:#E5E5E5; border-width: 1px; width: 90vh;">
+            <div class="container-fluid">
+                <div class="card-body pb-0">
+                    {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">             
+                            <strong>{{message}}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>                         
+                        {% endfor %}
+                    {% endif %} 
+                    <h4 class="font-weight-bolder mb-4" style="text-align: center;">MUAT NAIK</h4>
+                    <div class="card-body">
+                        <form method = "POST" action="{% url 'bulk_update_init' %}" enctype="multipart/form-data" id="form">
+                            {% csrf_token %}
+                            {{ form.non_field_errors }}
+    
+                            <div class="form-group">
+                                <div class="col">
+                                    <div class="row">
+                                        <label for="{{ form.Fail.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px;">Nama Fail:</label>
+                                    </div>
+                                    <div class="row p-0">
+                                    <input type="file" name="Fail" required id="id_Fail" size="60" style="padding-left: 0%;" 
+                                    {{ form.Fail }} 
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col">
+                                    <div class="row" >
+                                        <div class="col mt-4" style="text-align: center;">
+                                            <button type="submit" class="btn btn-primary btn-lg" style="background-color: #7AC142; color: white; width: 250px; height: 50px;" id="form_submit_button">
+                                                MUAT NAIK
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" >
+                                      <div class="col mt-2 mb-0" style="text-align: center;">
+                                        <a href="/masterlist-budget" id="form_submit_button">
+                                            <u style="color: blue; font-size: 0.875rem; font-weight: bold; margin: auto; ">KEMBALI</u>
+                                        </a>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+{% endblock javascripts %}

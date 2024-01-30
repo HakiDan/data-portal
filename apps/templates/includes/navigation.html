@@ -1,0 +1,57 @@
+
+  <nav class="navbar navbar-main navbar-expand-lg" id="navbarBlur">
+    <div class="container-fluid">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb bg-transparent mb-0 pb-1 px-0 me-sm-6 me-12">
+              <!-- <li class="breadcrumb-item"><a class="opacity-8 text-dark" href="javascript:;">Dashboard</a></li>
+              <li class="breadcrumb-item text-dark active" aria-current="page">
+                Dashboard
+              </li> -->
+            </ol>
+            {% if request.path == '/'%}
+            Laman Utama
+            {% elif request.path == '/history/'%}
+            Laman Utama / Sejarah Penyerahan
+            {% elif request.path == '/data-update/'%}
+            Laman Utama / Pengurusan Data
+            {% elif request.path == '/data-cleaning/'%}
+            Laman Utama / Pembetulan Data
+            {% elif request.path == '/profile/'%}
+            Laman Utama / Profil
+            {% elif request.path == '/report/'%}
+            Laman Utama / Laporan
+            {% elif request.path == '/register/' %}
+            Laman Utama / Daftar Pengguna
+            {% elif '/register/user-edit/' in request.path %}
+            Laman Utama / Daftar Pengguna / Sunting Profil Pengguna
+            {% elif '/register/user-list' in request.path %}
+            Laman Utama / Daftar Pengguna / Senarai Pengguna
+            {% elif request.path == '/faq/'%}
+            Laman Utama / Soalan Lazim
+            {% elif request.path == '/data-catalogue/'%}
+            Laman Utama / Katalog Data
+            {% elif request.path == '/inventory/'%}
+            Laman Utama / Inventori Item
+            {% elif 'upload' in request.path %}
+            Laman Utama / Penyerahan Data
+            {% elif 'masterlist-budget' in request.path %}
+            Laman Utama / Senarai Utama
+            {% elif 'masterlist-nec' in request.path %}
+            Laman Utama / Senarai Utama (NEC)
+            {% elif 'validation' in request.path %}
+            Laman Utama / Pengesahan Data
+            {% endif %}
+          </nav>
+          <div class="collapse navbar-collapse me-md-0 me-4" id="navbar">
+            <ul class="navbar-nav mb-2 mb-sm-0 ms-sm-auto justify-content-sm-end">
+              <li class="nav-item d-flex align-items-center">
+              <h6 style="text-transform:uppercase; margin: 0%;">SELAMAT DATANG, {{request.user.username}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h6>
+              <a href="{% url 'logout' %}" 
+              class="nav-link text-body text-uppercase font-weight-bold px-0">
+              Log Keluar
+              </a>
+            </li>
+          </ul>
+        </div>
+    </div>
+  </nav>

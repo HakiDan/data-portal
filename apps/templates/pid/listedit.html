@@ -1,0 +1,422 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<html>
+  <head>
+    <link rel="stylesheet" href="/static/assets/css/add.css">
+  </head>
+</html>
+<div class="container-fluid py-4">
+    <div class="card" style="min-height: 85vh">
+        <div class="card-header" style="height: 10%;">
+            <h5>
+                <b>
+                    SUNTING INISIATIF
+                </b>
+            </h5>
+        </div>
+        <div class="card-body pt-1" style="height: 10%;">
+            <div class="card-body" style="height: 80%;">
+                <form method = "POST" action="{% url 'listedit' object.pk %}" enctype="multipart/form-data" id="edit_form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.tekad.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Tekad:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" placeholder="eg: T1" disabled
+                                    {{ form.tekad }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    <span style="color:red">{{ form.tekad.errors }}</span>
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.ikhtiar.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Ikhtiar:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" placeholder="eg: I3" disabled
+                                    {{ form.ikhtiar }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    <span style="color:red">{{ form.ikhtiar.errors }}</span>
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.sub_1.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Subinisiatif 1:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" placeholder="eg: 1" disabled
+                                    {{ form.sub_1 }}
+                            </input>
+                            <i>Contoh: T1I3_Subinisiatif1</i>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.sub_1.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.sub_2.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Subinisiatif 2:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" placeholder="eg: 3" disabled
+                                    {{ form.sub_2 }}
+                            </input>
+                            <i>Contoh: T1I3_Subinisiatif1_Subinisiatif2</i>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.sub_2.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.sub_init_id.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap; display:none;">Indeks Data:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" disabled
+                                    {{ form.sub_init_id }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.sub_init_id.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.init_name.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Nama Inisiatif:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" disabled
+                                    {{ form.init_name }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    <span style="color:red">{{ form.init_name.errors }}</span>
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.subinit_name.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Nama Subinisiatif:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" disabled
+                                {{ form.subinit_name }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    <span style="color:red">{{ form.subinit_name.errors }}</span>
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.allocation.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Peruntukan (RM j):</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" placeholder="eg: 10000000"
+                                {{ form.allocation }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.allocation.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.cur_disb.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Penyaluran (RM j):</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" placeholder="eg: 10000000"
+                                    {{ form.cur_disb }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.cur_disb.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.cur_remark.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Nota:</label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" placeholder="Tulis nota anda di sini.."
+                                {{ form.cur_remark }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.cur_remark.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.ministry.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Nama Kementerian:</label>
+                            </div>
+                            <div class="row">
+                                <select class = "form-control"
+                                {{ form.ministry }}
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.ministry.errors }}
+                
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.agency.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Nama Agensi:</label>
+                            </div>
+                            <div class="row">
+                                <select class = "form-control" id="agency"
+                                {{ form.agency }}
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.agency.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.category.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Kategori:</label>
+                            </div>
+                            <div class="row">
+                                <select class = "form-control"
+                                {{ form.category }}
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.category.errors }}
+
+                    <div class="form-group">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.status.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Status:</label>
+                            </div>
+                            <div class="row">
+                                <select class = "form-control"
+                                {{ form.status }}
+                            </select>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form.status.errors }}
+
+                    <div class="form-group" style="display:none">
+                        <div class="col">
+                            <div class="row">
+                                <label for="{{ form.modified_by.id_for_label }}"></label>
+                            </div>
+                            <div class="row">
+                                <input class = "form-control" value="{{ user.username }}"
+                                {{ form.modified_by }}
+                            </input>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>
+                        <div class="col" style="margin: auto;">
+                            <u style="color: blue; font-size: 0.875rem; font-weight: bold; margin: auto;" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                Ruangan NEC (Jika ada)
+                            </u>
+                        </div>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <div class="form-group">
+                                <div class="col">
+                                    <div class="row">
+                                        <label for="{{ form.nec_id.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Indeks Data (NEC):</label>
+                                    </div>
+                                    <div class="row">
+                                        <input class = "form-control" placeholder="S1C1_9_1"
+                                            {{ form.nec_id }}
+                                        </input>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form.nec_id.errors }}
+            
+                            <div class="form-group">
+                                <div class="col">
+                                    <div class="row">
+                                        <label for="{{ form.stf.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">STF:</label>
+                                    </div>
+                                    <div class="row">
+                                        <select class = "form-control"
+                                        {{ form.stf }}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form.stf.errors }}
+            
+                            <div class="form-group">
+                                <div class="col">
+                                    <div class="row">
+                                        <label for="{{ form.category_nec.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Kategori NEC:</label>
+                                    </div>
+                                    <div class="row">
+                                        <select class = "form-control"
+                                        {{ form.category_nec }}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form.category_nec.errors }}
+            
+                            <div class="form-group">
+                                <div class="col">
+                                    <div class="row">
+                                        <label for="{{ form.program.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Program NEC:</label>
+                                    </div>
+                                    <div class="row">
+                                        <select class = "form-control"
+                                        {{ form.program }}
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form.program.errors }}
+            
+                            <div class="form-group">
+                                <div class="col">
+                                    <div class="row">
+                                        <label for="{{ form.target.id_for_label }}" class="col-sm-2 col-form-label px-0" style=" float: left; margin: 4px; flex-wrap: wrap;">Sasaran (RM j):</label>
+                                    </div>
+                                    <div class="row">
+                                        <input class = "form-control" placeholder="eg: 10000000"
+                                            {{ form.target }}
+                                    </input>
+                                    </div>
+                                </div>
+                            </div>
+                            {{ form.target.errors }}
+                        </div>
+                    </div>
+                
+                    <div class="row pt-4">
+                        <div class="col" style="text-align: center;">
+                            <button type="submit" class="btn btn-success btn-lg mb-0" style=" width: 220px;">
+                                HANTAR
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row pt-4">
+                        <div class="col" style="text-align: center; margin: auto;">
+                            <a href="/masterlist-budget/modify-list">
+                                <u style="color: blue; font-size: 0.875rem; font-weight: bold; margin: auto;">KEMBALI</u>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+<script>
+    document.querySelector('#edit_form').addEventListener('submit', function(e) {
+        var form = this;
+        e.preventDefault();
+        
+        Swal.fire({
+            icon: 'warning',
+            title: 'Sahkan Penyuntingan Inisiatif?',
+            text: 'Anda pasti anda mahu sahkan penyuntingan inisiatif ini?',
+            showCancelButton: true,
+            cancelButtonText: 'Tidak',
+            showLoaderOnConfirm: true,
+            confirmButtonText: 'Sahkan',
+            confirmButtonColor: '#7AC142',
+            focusConfirm: false,
+            allowOutsideClick: false
+        })
+        .then(function (result) {
+            if (result.isConfirmed) {
+                $("#edit_form :disabled").removeAttr('disabled');
+                form.submit();
+            }
+        });
+    });
+
+    $(document).ready(function(){
+        $('#agency').change(function(){
+         if ($("#agency option:selected").text() == "Lain-lain") {
+          var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+          Swal.fire({
+            title: 'Masukkan nama agensi',
+            html:
+            '<label style="font-size:small">Nama akronim agensi:</label><input id="abbr" class="mb-3 swal2-input">' +
+            '<label style="font-size:small">Nama penuh agensi:</label><input id="fullname" class="mb-3 swal2-input">',
+            showCancelButton: true,
+            cancelButtonText:'Batal',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Hantar',
+            confirmButtonColor: '#7AC142',
+            allowOutsideClick: false,
+            returnInputValueOnDeny: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    agency_abbr = $('#abbr').val();
+                    agency_fullname = $('#fullname').val();
+                    if (agency_abbr !== null && agency_fullname !== null) {
+                        $.ajax({
+                            method:'POST',
+                            url:"{% url 'add_agency' %}",
+                            headers: {'X-CSRFToken': csrftoken},
+                            data : {
+                              agency_abbr:agency_abbr,
+                              agency_fullname:agency_fullname,
+                              csrfmiddlewaretoken : csrftoken,
+                            },
+                            success:function(data)
+                            {
+                              Swal.fire({
+                                position: 'mid',
+                                icon: 'success',
+                                text: 'Agensi ' + agency_abbr + ' telah berjaya ditambah',
+                                showConfirmButton: false,
+                                timer: 1500
+                              }).then(function(){
+                                location.reload();
+                            })
+                            },
+                        })
+                    }
+                }
+              })
+            }
+          })
+        })
+</script>
+{% endblock javascripts %}

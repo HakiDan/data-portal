@@ -1,0 +1,68 @@
+<!--
+=========================================================
+* Soft UI Dashboard - v1.0.0
+=========================================================
+
+* Product Page: https://www.creative-tim.com/product/soft-ui-dashboard
+* Copyright 2021 Creative Tim (https://www.creative-tim.com)
+* Licensed under MIT (https://github.com/creativetimofficial/soft-ui-dashboard/blob/master/LICENSE.md)
+
+* Coded by Creative Tim
+
+=========================================================
+
+* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>
+    Portal Data LAKSANA (PODS)
+  </title>
+
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+  <link href="/static/assets/css/nucleo-icons.css" rel="stylesheet" />
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <link href="/static/assets/css/nucleo-svg.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
+  <link id="pagestyle" href="/static/assets/css/soft-ui-dashboard.css?v=1.0.0" rel="stylesheet" />
+
+  <!-- Specific CSS goes HERE -->
+  {% block stylesheets %}{% endblock stylesheets %}
+
+</head>
+<body class="g-sidenav-show bg-gray-100">
+{{ redirect_to_login_immediately }}
+{% load custom_tags %}
+  {% if request.user|in_group:"ia_group" %}
+    {% include "includes/sidebar-ia.html" %}
+  {% elif request.user|in_group:"dq_group" %}
+    {% include "includes/sidebar-dq.html" %}
+  {% elif request.user|in_group:"pid_group" %}
+    {% include "includes/sidebar-pid.html" %}
+  {% endif %}
+
+  <main class="main-content mt-4 border-radius-lg">
+    
+    {% include "includes/navigation.html" %}
+    
+    {% block content %}{% endblock content %}
+
+  </main>
+
+  {% include "includes/scripts.html" %}
+
+  <!-- Specific JS goes HERE --> 
+  {% block javascripts %}{% endblock javascripts %}
+
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+
+</body>
+</html>

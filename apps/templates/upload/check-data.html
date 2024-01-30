@@ -1,0 +1,459 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-4 h-100">
+  <div class="row mb-4">
+    <div class="col-lg-9" style="height: 74vh;">
+      
+      {% if not resultwrong.empty and not resultright.empty  %}
+      <div class="col" style="height: 49%;">
+        <div class="card" style="height: 100%;">
+          <div class="card-body p-4" style="height: 20%;">
+            <h5><b>{{count_row_rejected}} BARIS TIDAK DITERIMA</b></h5>
+          </div>
+          <div class="card-body px-0 py-0" style="height: 70%;">
+            <div class="table-responsive p-0" style="height: 25vh;"> <!-- 25vh old height -->
+              <table class="table align-items-center justify-content-center mb-0 table table-bordered">
+                <thead>
+                  <tr>
+                    {% for column in resultwrong.columns %}
+                    <th>
+                        {{ column }}
+                    </th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for index, row in resultwrong.iterrows %}
+                  <tr>
+                    {% for cell in row %}
+                    <td>
+                      {{ cell }}
+                    </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-body px-0 py-0" style="height: 10%;">
+            <div class="row p-2 px-3" style="height: 100%; overflow: hidden;">
+              <div class="col-lg-5">
+                <b>Jumlah Pembayaran Tidak Diterima: RM {{sumrejected}}</b>
+              </div>
+
+              <div class="col-lg-5">
+                <b>Jumlah Penerima Unik Tidak Diterima: {{sum_bene_rejected}}</b>
+              </div>
+
+              <div class="col-lg-2">
+                <b>
+                  <form method="POST" action="{% url 'download_file_rejected' %}" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 10px; margin-top: 2px;">
+                    {% csrf_token %}
+                    <input type="text" name="file_name" value="{{ row_rejected }}" hidden>
+                    <button type="submit" class="btn btn-info btn-lg" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 20px; background-color: white; color: blue; font-size: 1rem;">
+                      <u>Muat Turun</u>
+                    </button>    
+                  </form> 
+                </b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col" style="height: 2%;">
+      </div>
+
+      <div class="col" style="height: 49%;">
+        <div class="card" style="height: 100%;">
+          <div class="card-body p-4" style="height: 20%;">
+            <h5><b>{{count_row_accepted}} BARIS DITERIMA</b></h5>
+          </div>
+          <div class="card-body px-0 py-0" style="height: 70%;">
+            <div class="table-responsive p-0" style="height: 25vh;">
+              <table class="table align-items-center justify-content-center mb-0 table table-bordered">
+                <thead>
+                  <tr>
+                    {% for column in resultright.columns %}
+                    <th>
+                        {{ column }}
+                    </th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for index, row in resultright.iterrows %}
+                  <tr>
+                    {% for cell in row %}
+                    <td>
+                      {{ cell }}
+                    </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-body px-0 py-0" style="height: 10%;">
+            <div class="row p-2 px-3" style="height: 100%; overflow: hidden;">
+              <div class="col-lg-5">
+                <b>Jumlah Pembayaran Diterima: RM {{sumaccepted}}</b>
+              </div>
+              <div class="col-lg-5">
+                <b style="margin-left: 10px;">Jumlah Penerima Unik Diterima: {{sum_bene_accepted}}</b>
+              </div>
+              <div class="col-lg-2">
+                <b>
+                  <form method="POST" action="{% url 'download_file_accepted' %}" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 10px; margin-top: 2px;">
+                    {% csrf_token %}
+                    <input type="text" name="file_name" value="{{ row_accepted }}" hidden>
+                    <button type="submit" class="btn btn-info btn-lg" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 20px; background-color: white; color: blue; font-size: 1rem;">
+                      <u>Muat Turun</u>
+                    </button>
+                  </form>
+                </b>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-check" style="margin-top: 20px;">
+        <input class="form-check-input" type="checkbox" name="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Saya dengan ini mengesahkan bahawa maklumat di atas adalah sah dan benar.
+        </label>
+      </div>
+      <div class="row">
+        <button id="submitbutton" type="button" class="btn btn-warning btn-lg" 
+          style="width: 220px; background-color: #7AC142; display:none; margin-left: 10px;">
+            HANTAR
+        </button>
+        <button id="cancelbutton" type="button" class="btn btn-warning btn-lg" style="width:220px; margin-left: 10px;">
+          BATAL
+        </button>
+      </div>
+
+      {% elif resultwrong.empty %}
+      <div class="col" style="height: 100%;">
+        <div class="card" style="height: 100%;">
+          <div class="card-body p-4" style="height: 10%;">
+            <h5><b>{{count_row_accepted}} BARIS DITERIMA</b></h5>
+          </div>
+          <div class="card-body px-0 py-0" style="height: 85%;">
+            <div class="table-responsive p-0" style="height: 100%;">
+              <table class="table align-items-center justify-content-center mb-0 table table-bordered">
+                <thead>
+                  <tr>
+                    {% for column in resultright.columns %}
+                    <th>
+                        {{ column }}
+                    </th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for index, row in resultright.iterrows %}
+                  <tr>
+                    {% for cell in row %}
+                    <td>
+                      {{ cell }}
+                    </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-body px-0 py-0" style="height: 5%;">
+            <div class="row p-2 px-3" style="height: 100%; overflow: hidden;">
+              <div class="col-lg-5" style="flex: auto;">
+                <b>Jumlah Pembayaran Diterima: RM {{sumaccepted}}</b>
+              </div>
+              <div class="col-lg-5">
+                <b>Jumlah Penerima Unik Diterima: {{sum_bene_accepted}}</b>
+              </div>
+              
+              <div class="col-lg-2">
+                <b>
+                  <form method="POST" action="{% url 'download_file_accepted' %}" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 10px; margin-top: 2px;">
+                    {% csrf_token %}
+                    <input type="text" name="file_name" value="{{ row_accepted }}" hidden>
+                    <button type="submit" class="btn btn-info btn-lg" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 20px; background-color: white; color: blue; font-size: 1rem;">
+                      <u>Muat Turun</u>
+                    </button> 
+                  </form>
+                </b>
+              </div>
+            </div>
+          </div>    
+        </div>
+      </div>
+      
+      <div class="form-check" style="margin-top: 20px;">
+        <input class="form-check-input" type="checkbox" name="checkbox" value="" id="flexCheckDefault">
+        <label class="form-check-label" for="flexCheckDefault">
+          Saya dengan ini mengesahkan bahawa maklumat di atas adalah sah dan benar.
+        </label>
+      </div>
+      <div class="row">
+        <button id="submitbutton" type="button" class="btn btn-warning btn-lg" 
+          style="width: 220px; background-color: #7AC142; display:none; margin-left: 10px;">
+            HANTAR
+        </button>
+        <button id="cancelbutton" type="button" class="btn btn-warning btn-lg" style="width:220px; margin-left: 10px;">
+          BATAL
+        </button>
+      </div>
+
+      {% elif resultright.empty %}
+      <div class="col" style="height: 100%;">
+        <div class="card" style="height: 100%;">
+          <div class="card-body p-4" style="height: 10%;">
+            <h5><b>{{count_row_rejected}} BARIS TIDAK DITERIMA</b></h5>
+          </div>
+          <div class="card-body px-0 py-0" style="height: 85%;">
+            <div class="table-responsive p-0" style="height: 100%;">
+              <table class="table align-items-center justify-content-center mb-0 table table-bordered">
+                <thead>
+                  <tr>
+                    {% for column in resultwrong.columns %}
+                    <th>
+                        {{ column }}
+                    </th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for index, row in resultwrong.iterrows %}
+                  <tr>
+                    {% for cell in row %}
+                    <td>
+                      {{ cell }}
+                    </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card-body px-0 py-0" style="height: 5%;">
+            <div class="row p-2 px-3" style="height: 100%; overflow: hidden;">
+              <div class="col-lg-5" style="flex: auto;">
+                <b>Jumlah Pembayaran Tidak Diterima: RM {{sumrejected}}</b>
+              </div>
+              <div class="col-lg-5">
+                <b>Jumlah Penerima Unik Tidak Diterima: {{sum_bene_rejected}}</b>
+              </div>
+              
+              <div class="col-lg-2">
+                <b>
+                  <form method="POST" action="{% url 'download_file_rejected' %}" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 10px; margin-top: 2px;">
+                    {% csrf_token %}
+                    <input type="text" name="file_name" value="{{ row_rejected }}" hidden>
+                    <button type="submit" class="btn btn-info btn-lg" style="box-shadow: none; float: right; text-align: right; padding: 0%; height: 20px; background-color: white; color: blue; font-size: 1rem;">
+                      <u>Muat Turun</u>
+                    </button> 
+                  </form>
+                </b>
+              </div>
+            </div>
+          </div>    
+        </div>
+      </div>
+      <div class="row">
+        <button id="cancelbutton" type="button" class="btn btn-warning btn-lg" style="width:220px; margin-left: 10px; margin-top: 20px;">
+          BATAL
+        </button>
+      </div>
+      {% endif %}
+    </div>
+    
+    <div class="col-lg-3" style="height: 74vh;">
+      <div class="col" style="height: 20%;">
+        <div class="card" style="height: 90%;">
+          <div class="card-body p-4" style="overflow: hidden;">
+            <h5 class="font-weight-bolder">NAMA FAIL</h5>
+            {{ file_name }}
+          </div>
+        </div>
+      </div>
+
+      {% if resultwrong.empty  %}
+      <div class="col" style="height:80%;">
+        <div class="card" style="height: 100%;">
+          <div class="card-body p-4">
+            <h5 class="font-weight-bolder">PUNCA RALAT</h5>
+            Tiada ralat dikesan
+          </div>
+        </div>
+      </div>
+
+      {% elif not resultwrong.empty  %}
+      <div class="col" style="height:80%;">
+        <div class="card" style="height: 100%;"> 
+          <div class="card-body p-4">
+            <h5 class="font-weight-bolder">PUNCA RALAT</h5>
+            <ul>
+              <li>Fail anda mempunyai baris yang ditolak</li>
+              <li>Ralat telah dikenal pasti pada kolum <b>'tarikh' ATAU 'no_id_ind' ATAU 'no_brn_entiti'</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+<input type="hidden" id="refreshed" value="no">
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+
+  document.getElementById('cancelbutton').addEventListener("click", function() {
+    batal('{{file_name}}', '{{initiative}}');
+  }, false);
+
+  function batal(file_name, initiative){
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    let element = document.getElementById("cancelbutton");
+  
+    Swal.fire({
+      icon: 'warning',
+      title: 'Batal Penyerahan Data?',
+      text: 'Anda pasti anda mahu batalkan penyerahan data?',
+      showCancelButton: true,
+      cancelButtonText: 'Tidak',
+      showLoaderOnConfirm: true,
+      confirmButtonText: 'Batal',
+      confirmButtonColor: '#DC3A3A',
+      focusConfirm: false,
+      allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            method:'POST',
+            url: "{% url 'cancel_submission' %}",
+            headers: {'X-CSRFToken': csrftoken},
+            data : {
+              file_name : file_name,
+              csrfmiddlewaretoken : csrftoken,
+              initiative: initiative,
+              },
+              success:function(data)
+              {
+                data;
+                Swal.fire(
+                  {
+                    position: 'middle',
+                    icon: 'success',
+                    text: 'Fail telah dipadam',
+                    timer: 1500,
+                    showConfirmButton: false,
+                  })
+                .then(function() {
+                window.location = '/history';
+                })
+              }
+            })
+          }
+        })
+      }
+
+  onload=function(){
+    var e=document.getElementById("refreshed");
+    if(e.value=="no")e.value="yes";
+    else{e.value="no";location.reload();}
+  }
+
+  var checkbox = document.querySelector("input[name=checkbox]");
+  checkbox.addEventListener('change', function() {
+    var text = document.getElementById("submitbutton");
+    if (this.checked == true){
+      text.style.display = "block";
+    } else {  
+      text.style.display = "none";
+    }
+  });
+
+  document.getElementById('submitbutton').addEventListener("click", function() {
+    hantar('{{file_name}}', '{{initiative|safe}}', '{{sumaccepted}}', '{{sumrejected}}', '{{count_row_accepted}}', '{{count_row_rejected}}', '{{result_msg}}', '{{msg}}', '{{row_rejected}}', '{{row_accepted}}', '{{template_name}}', '{{file_ext}}', '{{sub_init_id}}');
+  }, false);
+
+  function hantar(file_name, initiative, sumaccepted, sumrejected, count_row_accepted, count_row_rejected, result_msg, msg, row_rejected, row_accepted, template_name, file_ext, sub_init_id){
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    let element = document.getElementById("submitbutton");
+
+    Swal.fire({
+      icon: 'warning',
+      title: 'Sahkan Penyerahan Data?',
+      text: 'Anda pasti anda mahu sahkan penyerahan data?',
+      showCancelButton: true,
+      cancelButtonText: 'Tidak',
+      showLoaderOnConfirm: true,
+      confirmButtonText: 'Sahkan',
+      confirmButtonColor: '#7AC142',
+      focusConfirm: false,
+      allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            method:'POST',
+            url:"{% url 'dq_lvl_one' %}",
+            headers: {'X-CSRFToken': csrftoken},
+            data : {
+              file_name : file_name,
+              csrfmiddlewaretoken : csrftoken,
+              initiative : initiative,
+              sumaccepted : sumaccepted,
+              sumrejected : sumrejected,
+              count_row_accepted : count_row_accepted,
+              count_row_rejected : count_row_rejected,
+              result_msg : result_msg,
+              msg : msg,
+              row_rejected : row_rejected,
+              row_accepted : row_accepted,
+              template_name : template_name,
+              file_ext : file_ext,
+              sub_init_id : sub_init_id,
+              },
+              success:function(data)
+              {
+                data;
+                Swal.fire({
+                  position: 'middle',
+                  icon: 'success',
+                  text: 'Fail anda telah dimuat naik!',
+                  timer: 2000,
+                  showConfirmButton: false,
+                })
+                .then(function() {
+                window.location = '/history';
+                })
+              }
+            })
+          }
+        })
+      }
+
+  
+</script>
+{% endblock javascripts %}

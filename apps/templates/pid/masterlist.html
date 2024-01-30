@@ -1,0 +1,345 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+<link rel="stylesheet" href="/static/assets/css/table.css">
+
+<style>
+
+    tr { height: 5.75vh; }
+    
+</style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">             
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>                         
+        {% endfor %}
+    {% endif %} 
+    <!-- Card set to min height to accomodate when there are no data, and can expand from it -->
+    <div class="card" style="min-height: 10vh">
+        <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+            <div style="min-height: 10vh;" >
+                <table id="table" class="display nowrap cell-border" style="width:100%; color: black;">    
+                    <thead>
+                        <!-- table header -->
+                        <tr>
+                            <th>No.  </th>
+                            <th>Indeks Data </th>
+                            <th>Tekad </th>
+                            <th>Ikhtiar </th>
+                            <th>Nama Inisiatif </th>
+                            <th>Nama Subinisiatif </th>
+                            <th>Peruntukan (RM juta) </th>
+                            <th>Penyaluran (RM juta) </th>
+                            <th>Nota </th>
+                            <th>Kementerian </th>
+                            <th>Agensi </th>
+                            <th>Sektor </th>
+                            <th>Kategori Bantuan </th>
+                            <th>Status Inisiatif </th>
+                            <th>PIC </th>
+                            <th>Tarikh Dikemaskini </th>
+                            <th>Terkini Dikemaskini Oleh </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- table body and cells settings -->
+                        {% for object in object %}
+                        <tr>
+                            <td> </td>
+                            <td>{{object.sub_init_id}}</td>
+                            <td>{{object.tekad}}</td>
+                            <td>{{object.ikhtiar}}</td>
+                            <td style="text-align: left; word-wrap: normal;">{{object.init_name}}</td>
+                            <td style="text-align: left; overflow: hidden">{{object.subinit_name}}</td>
+                            <td>
+                                {% load humanize %}
+                                {{ object.allocation|default:"<i>TIADA DATA</i>"|intcomma }}
+                            </td>
+                            <td>
+                                {% load humanize %}
+                                {{ object.cur_disb|default:"<i>TIADA DATA</i>"|intcomma }}
+                            </td>
+                            <td style="text-align: left; cursor: pointer;" id="{{object.pk}}, {{object.cur_remark|safe}}">
+                                {{object.cur_remark|default:"<i>TIADA DATA</i>"|safe|truncatechars:25}}
+                                <script>
+                                    document.getElementById("{{object.pk}}, {{object.cur_remark|safe}}").addEventListener("click", function() {
+                                      remark("{{object.pk}}", "{{object.cur_remark|safe}}");
+                                    });
+                                </script>
+                            </td>
+                            <td style="text-align: left;">{{object.ministry|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.agency|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.sector|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.category|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.status|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">
+                                {% load custom_tags %}
+                                {% for userprofile in object.sub_init_id|assc_sub_init_id %}
+                                    {% if userprofile|is_pic:"pid_group" is True %}
+                                        {{userprofile.user.get_full_name}}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td style="text-align: left;">{{object.date_modified|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.modified_by|default:"<i>TIADA DATA</i>"}}</td>
+                        </tr>
+                        {% endfor %}    
+                    </tbody>
+                </table>
+
+                <!-- settings for the 3 buttons at bottom -->
+                <div style="text-align: right; margin-top: 18px;">
+                    <a href="/masterlist-budget/bulk-update-init" style="box-shadow: none; background-color: white; color: blue; width: 220px; margin: 14px 64px; text-decoration: underline; font-weight: bold; font-size: 0.875rem;">
+                        MUAT NAIK
+                    </a>
+                    <a href="{% url 'listadd' %}">
+                        <button type="button" class="btn btn-info btn-lg" style="width: 220px; margin: 0px;">
+                            TAMBAH
+                        </button>
+                    </a>
+                    <a href="{% url 'modifylist' %}">
+                        <button type="button" class="btn btn-success btn-lg m-0" style="width: 220px;">
+                            KEMAS KINI
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="/static/assets/js/read_remark.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/assets/js/plugins/chartjs.min.js"></script>
+<script src="/static/assets/js/plugins/Chart.extension.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    $(document).ready(function () {
+        var table = $('#table').DataTable({
+          
+            //Columns definition
+            columnDefs: [
+                {
+                    orderable: false,
+                    targets: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
+                },
+
+                {   
+                    // column no 4 and 5 is set to expand bottom if full
+                    orderable: false,
+                    targets: [4,5],
+                    render: function ( data, type, row ) 
+                        {
+                            return '<span style="white-space:wrap">' + data + "</span>";  
+                        }
+                },
+              
+              //Text Align Center for each column : count in array format
+              { className: 'text-center', targets: [0,1,2,3,6,7,9,10,11,12,13,14,15,16] },
+            ],
+
+            order: [],
+            fixedWidth: true,
+            scrollX: true,
+            scrollY: false,
+            autowidth: false,
+
+            //Higlight Search
+            mark: true,
+
+            //Buttons and Tables Positioning
+            dom:    "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+            //Buttons features and css
+            buttons: [
+                {
+                    text: 'SENARAI UTAMA',
+                    className: 'btn btn-default btn-sm-add',
+
+                    action: false,
+                }
+            ],
+
+            scrollCollapse: true,
+
+            // Labelling
+            language: {
+                "search": "",
+                "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                "zeroRecords": "Tiada rekod ditemui",
+                // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+                "infoEmpty":      "Menunjukkan 0 hasil carian",
+                "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                "thousands": "'",
+                "decimal": ".",
+                "paginate": {
+                            "previous": "<",
+                            "next": ">"
+                            },
+            },
+
+            // Filter Column Selection (Latest)
+            initComplete: function () {
+
+                this.api()
+                .columns([1,2,3,4,5,9,10,11,12,13,14,16])
+                .every(function (i) {
+                    var column = this;
+                       
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw();
+
+                    // Use if else statement of an array
+                    // Choose a column using array arrangement
+                    if (i == 4)  
+                    {
+                        var select = $('<select><option value=""></option></select>')
+
+                        // adjust size of column header dropdown filter
+                            
+                        .css( {'margin-left': '10px', 'height':'30px', 'width': '350px'} )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        
+                        $( select ).click( function(e) {
+                            e.stopPropagation();
+                        });
+                           
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+
+                    else if (i == 5)  
+                    {
+                        var select = $('<select><option value=""></option></select>')
+                            
+                        .css( {'margin-left': '10px', 'height':'30px', 'width': '350px'} )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        
+                        $( select ).click( function(e) {
+                            e.stopPropagation();
+                        });
+                           
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+
+                    else if (i == 12)  
+                    {
+                        var select = $('<select><option value=""></option></select>')
+                            
+                        .css( {'margin-left': '10px', 'height':'30px', 'width': '350px'} )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        
+                        $( select ).click( function(e) {
+                            e.stopPropagation();
+                        });
+                           
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    } 
+
+                    else
+                    {
+                        var select = $('<select><option value=""></option></select>')
+                        
+                        .css( {'margin-left': '10px', 'height':'30px', } )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        $( select ).click( function(e) {
+                        e.stopPropagation();
+                        });
+                        
+                        
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+                    
+                });       
+            },
+
+        });
+  
+
+        //Index numbering
+        table.on('order.dt search.dt', function () {
+            let i = 1;
+    
+            table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                this.data(i++);
+            });
+        }).draw();
+
+        $('[type=search]').each(function () {
+            // $(this).attr("placeholder", "Search...");
+            $(this).after('<span class="fa fa-search"></span>');
+        });
+    });
+  
+</script>
+{% endblock javascripts %}

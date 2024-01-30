@@ -1,0 +1,410 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+    <link rel="stylesheet" href="/static/assets/css/table.css">
+
+    <style>
+
+      tr { height: 4.4vh; }
+
+    </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+<div class = "container-fluid py-4 h-100">
+  <div class="col">
+    <div class="card" style="height: 100%;">
+      <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+        <div style="min-height: 10vh;" >
+          <table id="table" class="display nowrap cell-border" style="width:100%; color: black;">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama Laporan</th>
+                <th style="text-align: center;">Tarikh Laporan</th>
+                <th> </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for pm_report_path, pm_time in items_pm %}
+              <tr>
+                <td></td>
+                <td>{{pm_report_path}}</td>
+                <td style="text-align: center;">{{pm_time}}</td>
+                <td>
+                  <form method="POST" action="{% url 'download_pm_report' %}">
+                    {% csrf_token %}
+                    <input type="text" name="file_name" value="{{ pm_report_path }}" hidden>
+                    <button type="submit" class="btn btn-info btn-lg" style="box-shadow: none; padding: 0%; margin: auto; background-color: transparent; color: blue;">
+                      <b><u>Muat Turun</u></b>
+                    </button> 
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 20px;"></div>
+    <div class="card" style="height: 100%;">
+      <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+        <div style="min-height: 10vh;" >
+          <table id="table2" class="display nowrap cell-border" style="width:100%; color: black;">
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Nama Laporan</th>
+                <th style="text-align: center;">Tarikh Laporan</th>
+                <th> </th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for jkk_report_path, jkk_time in items_jkk %}
+              <tr>
+                <td></td>
+                <td>{{jkk_report_path}}</td>
+                <td style="text-align: center;">{{jkk_time}}</td>
+                <td>
+                  <form method="POST" action="{% url 'download_jkk_report' %}">
+                    {% csrf_token %}
+                    <input type="text" name="file_name" value="{{ jkk_report_path }}" hidden>
+                    <button type="submit" class="btn btn-info btn-lg" style="box-shadow: none; padding: 0%; margin:auto; background-color: transparent; color: blue;">
+                      <b><u>Muat Turun</u></b>
+                    </button> 
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+
+    <script src="/static/assets/js/plugins/chartjs.min.js"></script>
+    <script src="/static/assets/js/plugins/Chart.extension.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    
+    <script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+    
+    <script>
+    
+      $(document).ready(function () {
+          var table = $('#table').DataTable({
+              
+              //Search Filter
+              columnDefs: [
+                  {
+                      searchable: false,
+                      orderable: false,
+                    //   width: '1000%',
+                      targets: [0,3],
+                  },
+                //   { width: '20%', targets: 0 },
+                  
+                  //Text Align Center
+                  { className: 'text-center', targets: [0,2,3] },
+              ],
+            //   order: [[2, 'desc']],
+            order: [2],
+    
+            scrollX: '100%',
+            scrollY: 'false',
+    
+            
+            "columns": [
+              { "width": "5%" },
+              null,
+              { "width": "20%" },
+              { "width": "10%" },
+            ],
+    
+            //Higlight Search
+            mark: true,
+    
+            //Buttons and Tables Positioning
+            dom:    "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    
+            //Buttons features and css
+            buttons: [
+                  {
+                      text: 'LAPORAN PERDANA MENTERI',
+                      className: 'btn btn-default btn-sm-add',
+    
+                      action: false,
+                  }
+              ],
+    
+            // scrollCollapse: true,
+            // paging: false,
+            // lenghtPage: 5,
+            pageLength : 5,
+    
+            // Labelling
+            language: {
+                  "search": "",
+                  "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                  "zeroRecords": "Tiada rekod ditemui",
+                  // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+                  "infoEmpty":      "Menunjukkan 0 hasil carian",
+                  "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                  "thousands": "'",
+                  "decimal": ".",
+                  "paginate": {
+                            "previous": "<",
+                            "next": ">"
+                            },
+              },
+    
+    
+            // Filter Column Selection
+            initComplete: function () {
+                  this.api()
+                      
+                      .columns([])
+                      .every(function () {
+                          var column = this;
+                          
+                          
+                          var table = $('#example').DataTable();
+                          table.columns.adjust().draw();
+                          
+    
+                          var select = $('<select><option value=""></option></select>')
+                              
+                              .css( {'margin-left': '10px', 'height':'30px'} )
+                              .appendTo( $(column.header()) )
+                              .on('change', function () {
+                                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
+    
+                                  column.search(val ? '^' + val + '$' : '', true, false).draw();
+                              });
+                              $( select ).click( function(e) {
+                              e.stopPropagation();
+                              });
+                              
+                              
+                          column
+                              .data()
+                              .unique()
+                              .sort()
+                              .each(function (d, j) {
+                                  select.append('<option value="' + d + '">' + d + '</option>');
+                              });
+                              
+                          
+                      });
+    
+                  
+                      
+              },
+    
+              
+          });
+      
+    
+          //Index numbering
+          table.on('order.dt search.dt', function () {
+              let i = 1;
+      
+              table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                  this.data(i++);
+              });
+          }).draw();
+    
+          // $('.dataTables_filter input[type="search"]').css(
+          //     {'width':'40vh','display':'inline-block','height':'30px'}
+          // );
+    
+          // $('.dataTables_buttons').css(
+          //     {'width':'40vh','display':'inline-block','height':'30px'}
+          // );
+          // $('#table thead th').css('background-color', 'blue');
+    
+          // $('[type=search]').each(function () {
+          //           // $(this).attr("placeholder", "Search...");
+          //           $(this).after('<span class="fa fa-search"></span>');
+          //       });
+          
+      }
+      
+      
+      );
+
+      $(document).ready(function () {
+          var table2 = $('#table2').DataTable({
+              
+              //Search Filter
+              columnDefs: [
+                  {
+                      searchable: false,
+                      orderable: false,
+                    //   width: '1000%',
+                      targets: [0,3],
+                  },
+                //   { width: '20%', targets: 0 },
+                  
+                  //Text Align Center
+                  { className: 'text-center', targets: [] },
+              ],
+            //   order: [[2, 'desc']],
+            order: [],
+    
+            scrollX: '100%',
+            scrollY: 'false',
+    
+            
+            "columns": [
+              { "width": "5%" },
+              null,
+              { "width": "20%" },
+              { "width": "10%" },
+            ],
+    
+            //Higlight Search
+            mark: true,
+    
+            //Buttons and Tables Positioning
+            dom:    "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+    
+            //Buttons features and css
+            buttons: [
+                  {
+                      text: 'LAPORAN JAWATAN KUASA KERJA',
+                      className: 'btn btn-default btn-sm-add',
+    
+                      action: false,
+                  }
+              ],
+    
+            // scrollCollapse: true,
+            // paging: false,
+            // lenghtPage: 5,
+            pageLength : 5,
+    
+            // Labelling
+            language: {
+                  "search": "",
+                  "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                  "zeroRecords": "Tiada rekod ditemui",
+                  // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+                  "infoEmpty":      "Menunjukkan 0 hasil carian",
+                  "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                  "thousands": "'",
+                  "decimal": ".",
+                  "paginate": {
+                            "previous": "<",
+                            "next": ">"
+                            },
+              },
+    
+    
+            // Filter Column Selection
+            initComplete: function () {
+                  this.api()
+                      
+                      .columns([])
+                      .every(function () {
+                          var column = this;
+                          
+                          
+                          var table2 = $('#example').DataTable();
+                          table2.columns.adjust().draw();
+                          
+    
+                          var select = $('<select><option value=""></option></select>')
+                              
+                              .css( {'margin-left': '10px', 'height':'30px'} )
+                              .appendTo( $(column.header()) )
+                              .on('change', function () {
+                                  var val = $.fn.dataTable.util.escapeRegex($(this).val());
+    
+                                  column.search(val ? '^' + val + '$' : '', true, false).draw();
+                              });
+                              $( select ).click( function(e) {
+                              e.stopPropagation();
+                              });
+                              
+                              
+                          column
+                              .data()
+                              .unique()
+                              .sort()
+                              .each(function (d, j) {
+                                  select.append('<option value="' + d + '">' + d + '</option>');
+                              });
+                              
+                          
+                      });
+    
+                  
+                      
+              },
+    
+              
+          });
+      
+    
+          //Index numbering
+          table2.on('order.dt search.dt', function () {
+              let i = 1;
+      
+              table2.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                  this.data(i++);
+              });
+          }).draw();
+    
+          // $('.dataTables_filter input[type="search"]').css(
+          //     {'width':'40vh','display':'inline-block','height':'30px'}
+          // );
+    
+          // $('.dataTables_buttons').css(
+          //     {'width':'40vh','display':'inline-block','height':'30px'}
+          // );
+          // $('#table thead th').css('background-color', 'blue');
+    
+          $('[type=search]').each(function () {
+                    // $(this).attr("placeholder", "Search...");
+                    $(this).after('<span class="fa fa-search"></span>');
+                });
+          
+      }
+      
+      
+      );
+
+
+    </script>
+
+{% endblock javascripts %}

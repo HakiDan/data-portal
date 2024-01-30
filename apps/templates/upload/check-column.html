@@ -1,0 +1,337 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+{% if countUser < countTemplate %} 
+<div class="container-fluid py-4">
+  <div class="card">
+      <div class="card-body p-4">
+          <h5 class="font-weight-bolder">PUNCA RALAT</h5>
+          {% if messages %}
+            {% for message in messages %}
+              {%  if forloop.first  %}
+                <h6>{{ message }}</h6>
+              {% endif %}
+            {% endfor %}
+        {% endif %}
+          <ul class="list-of-headers">
+            {% for dataUser in dataRemaining %}
+              <li> {{dataUser}}</li>
+          {% endfor %}
+          </ul>
+      </div>
+  </div>
+</div>
+<form name="Item_2" method="POST" enctype="multipart/form-data">
+  <input type="text" hidden value="{{ file_name }}" name="file_name">
+  {% csrf_token %}
+  <button id="cancelbutton" type="button" class="btn btn-warning btn-lg" style="width:220px; margin-left: 10px;">
+    BATAL
+  </button>
+</form>
+
+{% elif countUser > countTemplate %}
+<div class="container-fluid py-4" style="min-height: 85vh; height: 100%;">
+  <div class="row" style="height: 85vh;">
+    <div class="col-lg-9" style="height: 100%;">
+      <div class="row" style="width: auto; height: 15%;">
+        <div class="col-lg-6" style="height: 100%; flex: auto;">
+          <div class="card mb-4" style="height: 90%;">
+              <div class="card-body p-4">
+                  <h5 class="font-weight-bolder">NAMA FAIL</h5>
+                  <p>{{ file_name }}</p> 
+              </div>
+          </div>
+        </div>
+        <div class="col-lg-6" style="height: 100%; flex: auto;">
+          <div class="card mb-4" style="height: 90%;">
+            <div class="card-body p-4">
+                <h5 class="font-weight-bolder">STATUS FAIL</h5>
+                <p>Fail anda sedang diproses</p> 
+            </div>
+          </div>
+        </div>
+      </div>
+        
+      <div class="row" style="width: auto; height: 85%;">  
+        <div class="col-md-12 mb-lg-0" style="height: 100%;">
+          <div class="card" style="height: 100%;">
+            <div class="card-body p-4" style="height: 10%;">
+              <h5 class="font-weight-bolder">PEMBETULAN KOLUM</h5>
+              <p>Kolum yang tidak sepadan akan dibuang</p>
+                
+            </div>
+            <div class="card-body p-4" style="height: 80%;">
+              <div class="table-responsive p-0 mb-4" style="height: 100%;"> 
+                <tr>
+                  {% for dataUser in dataRemaining %}
+                  <form name="Item_1" method="POST" id="replace-header-{{dataUser}}" enctype="multipart/form-data" >
+                  {% csrf_token %}
+                    <div class="container-fluid" style="padding: 0px;">
+                      <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                        <div class="col-lg-5" style="text-align: left;">
+                          <input type="text" disabled value="{{ dataUser }}" style="height: 50px; width:100%; background-color: #F9F6EE; border-radius: 10px;">
+                        </div>
+                        <div class="col-lg-5" style="text-align: left;">
+                          <select name="dropdown-dataTemplate" id="dropdown-{{dataUser}}" class="Input" style="height: 50px; width:100%; background-color: #F9F6EE; border-radius: 10px; min-width: 10%;">
+                            <option value="-">Sila Pilih</option>
+                            {% for dataRemaining2 in dataRemaining2 %}
+                            <option value="{{ dataRemaining2 }}">{{ dataRemaining2 }}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="col-lg-2">         
+                          <button type="button" class="btn btn-info" id = "replace-{{dataUser}}"
+                            style="height: 50px; width: 100%; background-color: #DF0991;">
+                            GANTI
+                          </button>
+                          <script>
+                            document.getElementById('replace-{{dataUser}}').addEventListener("click", function() {
+                              submit_replace_value('replace-header-{{dataUser}}', 'dropdown-{{dataUser}}', '{{dataUser}}', '{{initiative}}');
+                            });
+                          </script>
+                        </div> 
+                      </div> 
+                    </div>
+                  </form>
+                  {% endfor %} 
+                </tr>
+              </div>
+            </div>
+            <div class="input-group">
+              <a href="{% url 'datavalidation_submission' initiative file_name template_name file_ext sub_init_id %}" type="button" class="btn btn-success btn-lg" style="width:220px;">
+                SETERUSNYA
+              </a>
+              <form name="Item_2" method="POST" enctype="multipart/form-data">
+                <input type="text" hidden value="{{ file_name }}" name="file_name">
+                {% csrf_token %}
+                <button id="cancelbutton" type="button" class="btn btn-warning btn-lg" style="width:220px; margin-left: 10px;">
+                  BATAL
+                </button>
+              </form>
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-lg-3" style="height: 100%;">
+      <div class="card" style="height: 100%; flex: auto;">
+        <div class="card-body p-4">
+        <h5 class="font-weight-bolder">PUNCA RALAT</h5>
+          {% if messages %}
+            {% for message in messages %}
+              {%  if forloop.first  %}
+                <h6>{{ message }}</h6>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+          <ul class="list-of-headers" id="lst">
+            {% for dataUser in dataRemaining %}
+              <li> {{dataUser}}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+      
+  </div>
+</div>
+
+{% elif countUser == countTemplate %}
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-lg-9">
+      <div class="row" style="width: auto;">
+        <div class="col-xl-6 mb-xl-0 mb-4" style="height: 150px; min-width: 500px; flex: auto;">
+          <div class="card">
+              <div class="card-body p-4">
+                  <h4 class="font-weight-bolder">NAMA FAIL</h4>
+                  <p>{{ file_name }}</p> 
+              </div>
+          </div>
+        </div>
+        <div class="col-xl-6 mb-xl-0 mb-4" style="height: 150px; min-width: 500px; flex: auto;">
+          <div class="card">
+            <div class="card-body p-4">
+                <h4 class="font-weight-bolder">STATUS FAIL</h4>
+                <p>Fail anda sedang diproses</p> 
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mb-lg-0 mb-4">
+          <div class="card mt-1">
+            <div class="card-body p-4" style="min-height: 650px; flex: auto;">
+              <h4 class="font-weight-bolder">PEMBETULAN KOLUM</h4>
+              <p>Kolum yang tidak sepadan akan dibuang</p>
+                <div class="table-responsive p-0" style="height: 460px;"> 
+                  <tr>
+                    {% for dataUser in dataRemaining %}
+                    <form name="Item_1" method="POST" id="replace-header-{{dataUser}}" enctype="multipart/form-data" >
+                    {% csrf_token %}
+                      <div class="container-fluid" style="padding: 0px;">
+                        <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                          <div class="col-lg-5" style="text-align: left;">
+                            <input type="text" disabled value="{{ dataUser }}" style="height: 50px; width:100%; background-color: #F9F6EE; border-radius: 10px;">
+                          </div>
+                          <div class="col-lg-5" style="text-align: left;">
+                            <select name="dropdown-dataTemplate" id="dropdown-{{dataUser}}" class="Input" style="height: 50px; width:100%; background-color: #F9F6EE; border-radius: 10px; min-width: 10%;">
+                              <option value="-">Sila Pilih</option>
+                              {% for dataRemaining2 in dataRemaining2 %}
+                              <option value="{{ dataRemaining2 }}">{{ dataRemaining2 }}</option>
+                              {% endfor %}
+                            </select>
+                          </div>
+                          <div class="col-lg-2">         
+                            <button type="button" class="btn btn-info" id = "replace-{{dataUser}}"
+                              style="height: 50px; width: 100%; background-color: #DF0991;">
+                              GANTI
+                            </button>
+                            <script>
+                            document.getElementById('replace-{{dataUser}}').addEventListener("click", function() {
+                              submit_replace_value('replace-header-{{dataUser}}', 'dropdown-{{dataUser}}', '{{dataUser}}', '{{initiative}}');
+                            });
+                          </script>
+                          </div> 
+                        </div> 
+                      </div>
+                    </form>
+                    {% endfor %}
+                  </tr>
+                </div>
+                <div class="input-group">
+                  <a href="{% url 'datavalidation_submission' initiative file_name template_name file_ext sub_init_id %}" type="button" class="btn btn-success btn-lg" style="width:220px;">
+                    SETERUSNYA
+                  </a>
+                  <form name="Item_2" method="POST" enctype="multipart/form-data">
+                    <input type="text" hidden value="{{ file_name }}" name="file_name">
+                    {% csrf_token %}
+                    <button id="cancelbutton" type="button" class="btn btn-warning btn-lg" style="width:220px; margin-left: 10px;">
+                      BATAL
+                    </button>
+                  </form>
+                </div>
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3">
+          <div class="card" style="height: 100%;">
+          <div class="card-body p-4">
+              <h5 class="font-weight-bolder">PUNCA RALAT</h5>
+              {% if messages %}
+                {% for message in messages %}
+                  {%  if forloop.first  %}
+                    <h6>{{ message }}</h6>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+              <ul class="list-of-headers">
+                {% for dataUser in dataRemaining %}
+                  <li> {{dataUser}}</li>
+                {% endfor %}
+              </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<div id="replace-url" data-url="{% url 'replaceHeader' %}"></div>
+<input type="hidden" id="refreshed" value="no">
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript" src="../static/assets/js/check-column.js"></script>
+<script type="text/javascript">
+
+  document.getElementById('cancelbutton').addEventListener("click", function() {
+    batal('{{file_name}}', '{{initiative}}');
+  }, false);
+
+  function batal(file_name, initiative){
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    let element = document.getElementById("cancelbutton");
+  
+    Swal.fire({
+      icon: 'warning',
+      title: 'Batal Penyerahan Data?',
+      text: 'Anda pasti anda mahu batalkan penyerahan data?',
+      showCancelButton: true,
+      cancelButtonText: 'Tidak',
+      showLoaderOnConfirm: true,
+      confirmButtonText: 'Batal',
+      confirmButtonColor: '#DC3A3A',
+      focusConfirm: false,
+      allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            method:'POST',
+            url: "{% url 'cancel_submission' %}",
+            headers: {'X-CSRFToken': csrftoken},
+            data : {
+              file_name : file_name,
+              csrfmiddlewaretoken : csrftoken,
+              initiative: initiative,
+              },
+              success:function(data)
+              {
+                data;
+                Swal.fire(
+                  {
+                    position: 'middle',
+                    icon: 'success',
+                    text: 'Fail telah dipadam',
+                    timer: 1500,
+                    showConfirmButton: false,
+                  })
+                .then(function() {
+                window.location = '/history';
+                })
+              }
+            })
+          }
+        })
+      }
+
+
+  onload=function(){
+    var e=document.getElementById("refreshed");
+    if(e.value=="no")e.value="yes";
+    else{e.value="no";location.reload();}
+  }
+
+  function myFunction()
+    {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+    window.onclick = function(event) // Close the dropdown menu if the user clicks outside of it
+    {
+      if(!event.target.matches('.dropbtn'))
+      {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for(i = 0; i < dropdowns.length; i++)
+        {
+          var openDropdown = dropdowns[i];
+          if(openDropdown.classList.contains('show'))
+          {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+</script>
+{% endblock javascripts %}

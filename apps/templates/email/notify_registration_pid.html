@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body class="">
+    <table border="0" cellpadding="0" cellspacing="0" class="body">
+      <tr>
+        <td>&nbsp;</td>
+        <td class="container">
+          <div class="content">
+            <table class="main">
+              <tr>
+                <td class="wrapper">
+                  <table border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td>
+                        <p>Assalamualaikum w.b.t. dan Salam sejahtera,</p>
+                        <p>YAB Dato' Seri/ YB Datuk Seri/ YBhg. Datuk / YBhg. Dato' / YBhg. Datin / YBrs. Dr. / Tuan / Puan,</p>
+                        <p>PENDAFTARAN PENGGUNA {{email}} UNTUK PORTAL DATA LAKSANA (PODS)</p>
+                        <p>Dengan hormatnya perkara di atas adalah dirujuk.</p>
+                        <p>2.       Pendaftaran pengguna bagi pengguna {{email}} dalam sistem Portal Data Laksana (PODS) telah berjaya. Berikut ialah butiran pengguna bagi rujukan pihak tuan/puan:</p>
+                        <ul>
+                          <li>Nama pengguna: {{email}}</li>
+                          <li>Nama emel pengguna: {{email}}</li>
+                          <li>Nama agensi pengguna: {{agency}}</li>
+                          <li>Nombor telefon pengguna: {{phone_number}}</li>
+                          <li>Nama inisiatif: 
+                            {% for sub in subinit_name %}
+                            <ul>
+                              <li>{{sub}}</li>
+                            </ul>
+                          </li>
+                        </ul>
+                        <p>Segala kerjasama tuan/puan amat dihargai.</p>
+                        <p>Sekian, terima kasih.</p>
+                        <i>ini adalah e-mel yang dijana secara automatik. Tuan/Puan tidak perlu membalas mesej ini. Untuk pertanyaan, sila hubungi pegawai LAKSANA yang mengendalikan inisiatif anda.</i>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </body>
+</html>

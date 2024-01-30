@@ -1,0 +1,253 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+    <link rel="stylesheet" href="/static/assets/css/table.css">
+
+    <style>
+
+        tr { height: 5.75vh; }
+      
+    </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">             
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>                         
+        {% endfor %}
+    {% endif %} 
+    <div class="card" style="min-height: 10vh">
+        <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+            <div style="min-height: 10vh;" >
+                <table id="table" class="display nowrap cell-border" style="width:100%; color: black;">
+                    <thead>
+                        <tr>
+                            <th>No.  </th>
+                            <th>Sunting </th>
+                            <th>Indeks Data </th>
+                            <th>Tekad </th>
+                            <th>Ikhtiar </th>
+                            <th>Nama Inisiatif </th>
+                            <th>Nama Subinisiatif </th>
+                            <th>Peruntukan (RM j) </th>
+                            <th>Penyaluran (RM j) </th>
+                            <th>Nota </th>
+                            <th>Kementerian </th>
+                            <th>Agensi </th>
+                            <th>Sektor </th>
+                            <th>Kategori Bantuan </th>
+                            <th>Status Inisiatif </th>
+                            <th>PIC </th>
+                            <th>Tarikh Dikemaskini </th>
+                            <th>Terkini Dikemaskini Oleh </th>
+                        </tr>
+                    </thead>
+    
+                    <tbody>
+                        {% for object in object_list %}
+                        <tr>
+                            <td> </td>
+                            <td>
+                                <a href="{% url 'listedit' object.pk %}">
+                                    <button type="button" style="border: 0px; background-color: transparent"> 
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td>{{object.sub_init_id}}</td>
+                            <td>{{object.tekad}}</td>
+                            <td>{{object.ikhtiar}}</td>
+                            <td style="text-align: left;">{{object.init_name}}</td>
+                            <td style="text-align: left;">{{object.subinit_name}}</td>
+                            <td>
+                                {% load humanize %}
+                                {{ object.allocation|default:"<i>TIADA DATA</i>"|intcomma }}
+                            </td>
+                            <td>
+                                {% load humanize %}
+                                {{ object.cur_disb|default:"<i>TIADA DATA</i>"|intcomma }}
+                            </td>
+                            <td style="text-align: left; cursor: pointer;" id="{{object.pk}}, {{object.cur_remark|safe}}">
+                                {{object.cur_remark|default:"<i>TIADA DATA</i>"|safe|truncatechars:25}}
+                                <script>
+                                    document.getElementById("{{object.pk}}, {{object.cur_remark|safe}}").addEventListener("click", function() {
+                                      remark("{{object.pk}}", "{{object.cur_remark|safe}}");
+                                    });
+                                </script>
+                            </td>
+                            <td style="text-align: left;">{{object.ministry|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.agency|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.sector|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.category|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.status|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">
+                                {% load custom_tags %}
+                                {% for userprofile in object.sub_init_id|assc_sub_init_id %}
+                                    {% if userprofile|is_pic:"pid_group" is True %}
+                                        {{userprofile.user.get_full_name}}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                            <td style="text-align: left;">{{object.date_modified|default:"<i>TIADA DATA</i>"}}</td>
+                            <td style="text-align: left;">{{object.modified_by|default:"<i>TIADA DATA</i>"}}</td>
+                        </tr>      
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: right; margin-top: 18px;">
+                <a href="/masterlist-budget" type="button" class="btn btn-info btn-lg" style="width: 220px; background-color: #35BAE4;border-color:#35BAE4; margin: 0px;">
+                    KEMBALI
+                </a>
+            </div>
+        </div> 
+    </div> 
+</div>
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="/static/assets/js/read_remark.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script type="text/javascript">
+    $(document).ready(function (){
+    var table = $('#table').DataTable({
+                  
+                  //Search Filter
+                    columnDefs: [
+                        {
+                            orderable: false,
+                            targets: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
+                        },
+
+                //Text Align Center
+                { className: 'text-center', targets: [0,1,2,3,4,7,8,10,11,12,13,14,15,16,17] },
+            ],
+            // order: [[1, 'desc']],
+            order: [],
+
+            fixedWidth: true,
+            scrollX: '100%',
+
+            //Higlight Search
+            mark: true,
+
+            //Buttons and Tables Positioning
+            dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+            scrollCollapse: true,
+            // paging: false,
+
+            // Labelling
+            language: {
+                "search": "",
+                "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                "zeroRecords": "Tiada rekod ditemui",
+                // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+                "infoEmpty":      "Menunjukkan 0 hasil carian",
+                "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                "thousands": "'",
+                "decimal": ".",
+                'paginate': {
+                    'previous': '<',
+                    'next': '>'
+                    },
+            },
+
+            buttons: [
+                {
+                    text: 'SENARAI UTAMA',
+                    className: 'btn btn-default btn-sm-add',
+
+                    action: false,
+                }
+            ],
+
+
+            // Filter Column Selection
+            initComplete: function () {
+                this.api()
+                    // .columns(":not(:first-child)")
+                    .columns([2,3,4,5,6,9,10,11,12,13,14,15,17])
+                    .every(function () {
+                        var column = this;
+                        
+                        
+                        var table = $('#example').DataTable();
+                        table.columns.adjust().draw();
+                        
+
+                        var select = $('<select><option value=""></option></select>')
+                            // .appendTo($(column.footer()).empty())
+                            .css( {'margin-left': '10px', 'height':'30px'} )
+                            .appendTo( $(column.header()) )
+                            .on('change', function () {
+                                var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                                column.search(val ? '^' + val + '$' : '', true, false).draw();
+                            });
+                            $( select ).click( function(e) {
+                            e.stopPropagation();
+                            });
+                            
+                            
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                            });
+                            
+                        
+                    });
+
+                
+                    
+            },
+
+            
+        });
+
+        table.on('order.dt search.dt', function () {
+            let i = 1;
+
+            table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                this.data(i++);
+            });
+        }).draw();
+
+        $('[type=search]').each(function () {
+            // $(this).attr("placeholder", "Search...");
+            $(this).after('<span class="fa fa-search"></span>');
+        });
+        
+    },);
+  
+  
+  </script>
+{% endblock javascripts %}

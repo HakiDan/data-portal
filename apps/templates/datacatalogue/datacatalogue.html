@@ -1,0 +1,488 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+    <style>
+        body{
+            min-height: 10vh;
+            /* font-family: monospace; */
+            /* background-image: 
+            linear-gradient( 
+            to bottom right, #EFD7F4, #c5c7f1);
+            margin: 0; */
+        }
+        /* .container{
+        background-color: #E9E0F7;
+        width: 1000px;
+        max-width:  100%;
+        margin: 50px auto 0;
+        border-radius: 10px;
+        } */
+        .filter{
+        /* padding: 20px; */
+        display: grid;
+        grid-template-columns: 32.666% 32.666% 32.666%;
+        column-gap: 1%;
+        row-gap: 10px;
+        
+        }
+        .filter .item{
+        background-color: lightgray;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border: 1px !important;
+        border-color: black !important;
+        border-radius: 10px;
+
+        }
+        .filter .item select,
+        .filter .item input,
+        .filter .item button{
+        width: 100%;
+        padding: 5px;
+        border: none;
+        background-color: transparent;
+        border-left: 1px solid #ddd;
+        outline: none;
+        border-radius: 10px;
+        }
+        .filter .item label{
+        display: block;
+        width: 40%;
+        padding: 0 10px;
+        font-size: 16px;
+        margin: 0%;
+        font-weight: normal;
+        }
+        .filter .item.submit button{
+        /* background-color: #AA82ED; */
+        background-color: #cb0c9f;
+        color: #fff;
+        height: 100%;
+        }
+        .countResults{
+        font-size: xx-large;
+        text-align: center;
+        padding: 20px;
+        }
+        #list{
+            padding: 20px;
+            display: grid;
+            column-gap: 1%;
+            grid-template-columns: 32.66% 32.66% 32.66%;
+            row-gap: 40px;
+            
+        }
+        #list .item img{
+            width: 90%;
+            height:300px;
+            object-fit: cover;
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+        #list .item{
+            background-color: #fff5;
+            text-align: center;
+            border-radius: 10px;
+        }
+        #list .item .title{
+            font-weight: bold;
+        }
+        #list .item .price{
+            color: #F5B976;
+            letter-spacing: 1px;
+            padding: 20px;
+        }
+    </style>
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="card" style="min-height: 10vh">
+        <div class="card-header" style="">
+            <div class="row" style="justify-content: space-between;">
+                <div class="col">
+                    <h5>
+                        <b>
+                            KATALOG DATA
+                        </b>
+                    </h5>
+                </div>
+
+                <div class="col" style="text-align: right;">
+                    <h5>
+                        <b>
+                            <a href= " "><u style="color: blue;">MOHON AKSES DATA</u></a>
+                        </b>
+                    </h5>
+                    <!-- <button type="submit" class="btn btn-primary btn-lg m-0" style="background-color: #7AC142; color: white; width: 270px; height: 50PX;">
+                        MOHON AKSES DATA
+                    </button> -->
+                </div>
+
+                <!-- <div class="col-2">
+                    <a href= " "><u style="align-items: end;">Mohon Akses Data</u></a>
+                </div> -->
+            
+            </div>
+        </div>
+        <div class="card-body pt-0" style="height: 100%;">
+            
+            <form class="filter">
+                <div class="item">
+                    <label for="">Teras / Sektor</label>
+                    <select name="teras">
+                        <option value="">---</option>
+                        <option value="TIMA">TIMA</option>
+                        <option value="EKONOMI">EKONOMI</option>
+                    </select>
+                </div>
+                <div class="item">
+                    <label for="">Jenis</label>
+                    <select name="jenis">
+                        <option value="">---</option>
+                        <option value="GERAN">GERAN</option>
+                        <option value="BANTUAN KEWANGAN">BANTUAN KEWANGAN</option>
+                        <option value="PROGRAM">PROGRAM</option>
+                        <!-- <option value="grey">grey</option>
+                        <option value="blue">blue</option>
+                        <option value="brown">brown</option> -->
+                    </select>
+                </div>
+                <div class="item">
+                    <label for="">Nama Inisiatif</label>
+                    <input type="text" name="name">
+                </div>
+                <div class="item">
+                    <label for="">Pakej Tahun</label>
+                    <select name="startYear">
+                        <option value="">---</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                    </select>
+                </div>
+                <div class="item">
+                    <label for="">Tahun Tamat</label>
+                    <input type="text" name="endYear">
+                </div>
+                <div class="item submit">
+                    <button>Cari</button>
+                </div>
+            </form>
+            <div class="countResults">
+                <b id="count">5</b> carian ditemui
+            </div>
+            <!-- <div id="list">
+                
+            </div> -->
+
+            <div class="card-body px-0">
+                {% for i in value %}
+                <!-- {{i}} -->
+                <!-- <a href= "{% url 'tempcatalogue' %}" id="list-{{i}}"></a> -->
+                <a href= "{% url 'tempcatalogue' %}" id="list"></a>
+                {% endfor %}
+                <!-- <div id="replace-url" data-url="{% url 'replaceHeader' %}"></div> -->
+
+                <!-- <div id="list">
+                    
+                </div> -->
+                <!-- </a> -->
+                
+            </div>
+
+            <!-- <a href= " "><u style="text-align: right;">Mohon Akses Data</u></a> -->
+                   
+            <!-- <section style="padding-bottom: 20px;">
+                <div class="pb-2 lg:pb-4" style="margin-bottom: 20px;">
+                    <div class="flex flex-col items-start gap-2 pb-0 lg:flex-row lg:items-center lg:justify-between">
+                        <h6><b>TEKNOLOGI INFORMASI AKSES PASARAN: </b></h6>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="{% url 'tempcatalogue' %}">Kempen Beli Barangan Malaysia</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_1">Hab Inovasi 4IR</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">Dana Kandungan Digital</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">Warisan Dan Budaya Sebagai Pemangkin Ekonomi</a>
+                    </div>
+                </div>
+                
+            </section>
+            
+            <section style="padding-bottom: 20px;">
+                <div class="pb-2 lg:pb-4" style="margin-bottom: 20px;">
+                    <div class="flex flex-col items-start gap-2 pb-0 lg:flex-row lg:items-center lg:justify-between">
+                        <h6><b>KEWANGAN: </b></h6>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="{% url 'tempcatalogue' %}">i-Citra</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_1">RON95 Petrol Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">RON97 Petrol Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">RON97 Petrol Price</a>
+                    </div>
+                </div>
+                
+            </section>
+
+            <section style="padding-bottom: 20px;">
+                <div class="pb-2 lg:pb-4" style="margin-bottom: 20px;">
+                    <div class="flex flex-col items-start gap-2 pb-0 lg:flex-row lg:items-center lg:justify-between">
+                        <h6><b>EKONOMI: </b></h6>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_3">Diesel Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_1">RON95 Petrol Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">RON97 Petrol Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">RON97 Petrol Price</a>
+                    </div>
+                </div>
+                
+            </section>
+
+            <section style="padding-bottom: 20px;">
+                <div class="pb-2 lg:pb-4" style="margin-bottom: 20px;">
+                    <div class="flex flex-col items-start gap-2 pb-0 lg:flex-row lg:items-center lg:justify-between">
+                        <h6><b>PEKERJAAN: </b></h6>
+                    </div>
+                </div>
+
+                <div class="row" >
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_3">Diesel Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_1">RON95 Petrol Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">RON97 Petrol Price</a>
+                    </div>
+
+                    <div class="flex col-lg-4" style="margin-bottom: 30px;">
+                        <a class="text-primary underline hover:no-underline" href="/data-catalogue/dosm-public-economy_fuelprice_2">RON97 Petrol Price</a>
+                    </div>
+                </div>
+                
+            </section> -->
+           
+        </div> 
+        
+        
+    </div>
+                
+</div>
+    
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script> -->
+
+<script>
+ 
+    var listProducts = [
+    {
+        id: 1,
+        name: 'Kempen Beli Barangan Malaysia',
+        startYear: 2020,
+        endYear: 2025,
+        // quantity: 0,
+        // image: 'img1.jpg',
+        nature: {
+            teras: ['TIMA'],
+            jenis: ['GERAN'],
+            // type: 'T-shirt'
+        },
+        // url: $("#test"),
+        // href: /templates/datacatalogue/tempcatalogue.html
+        
+    },
+    {
+        id: 2,
+        name: 'DE Rantau',
+        // price: 300000,
+        startYear: 2021,
+        endYear: 2026,
+        nature: {
+            teras: ['EKONOMI'],
+            jenis: ['PROGRAM'],
+            // type: 'T-shirt'
+        },
+    },
+    // {
+    //     id: 3,
+    //     name: 'Name product black',
+    //     price: 200000,
+    //     nature: {
+    //         color: ['black'],
+    //         size: ['S', 'M', 'L'],
+    //         type: 'T-shirt'
+    //     },
+    // },
+    // {
+    //     id: 4,
+    //     name: 'Name product blue-black',
+    //     price: 400000,
+    //     nature: {
+    //         color: ['black', 'blue'],
+    //         size: ['S', 'M', 'L'],
+    //         type: 'T-shirt'
+    //     },
+    // },
+    // {
+    //     id: 5,
+    //     name: 'Name product brown',
+    //     price: 320000,
+    //     nature: {
+    //         color: ['brown'],
+    //         size: ['S', 'M', 'L'],
+    //         type: 'Polo'
+    //     },
+    // },
+    // {
+    //     id: 6,
+    //     name: 'Name product white-black',
+    //     price: 100000,
+        
+    //     nature: {
+    //         color: ['white', 'black'],
+    //         size: ['S', 'M', 'L'],
+    //         type: 'Shirt'
+    //     },
+    // },
+];
+
+let list = document.getElementById('list');
+
+
+let filter = document.querySelector('.filter');
+let count = document.getElementById('count');
+
+let productFilter = listProducts;
+showProduct(productFilter);
+
+// listProducts.forEach(function(obj) {
+//   var linkElement = document.createElement("a");
+//   linkElement.href = obj.url;
+//   linkElement.textContent = obj.title;
+
+//   list.appendChild(linkElement);
+// });
+
+function showProduct(productFilter){
+    count.innerText = productFilter.length;
+    list.innerHTML = '';
+    productFilter.forEach(item => {
+        let newItem = document.createElement('div');
+        newItem.classList.add('item');
+
+        // create image
+        // let newImage = new Image();
+        // newImage.src = item.image;
+        // newItem.appendChild(newImage);
+        // create name product
+        let newTitle = document.createElement('div');
+        newTitle.classList.add('title');
+        newTitle.innerText = item.name;
+        newItem.appendChild(newTitle);
+        // create price
+        // let newPrice = document.createElement('div');
+        // newPrice.classList.add('price');
+        // newPrice.innerText = item.price.toLocaleString() + ' đ';
+        // newItem.appendChild(newPrice);
+        //create url
+        // let newUrl = document.createElement('div');
+        // newUrl.classList.add('url');
+        // newUrl.innerText = item.url;
+        // newItem.appendChild(newUrl);
+
+        list.appendChild(newItem);
+    });
+}
+filter.addEventListener('submit', function(event){
+    event.preventDefault();
+    let valueFilter = event.target.elements;
+    productFilter = listProducts.filter(item => {
+        // check category
+        if(valueFilter.teras.value != ''){
+            if(item.nature.teras != valueFilter.teras.value){
+                return false;
+            }
+        }
+        // check color
+        if(valueFilter.jenis.value != ''){
+            if(!item.nature.jenis.includes(valueFilter.jenis.value)){
+                return false;
+            }
+        }
+        // check name
+        if(valueFilter.name.value != ''){
+            if(!item.name.includes(valueFilter.name.value)){
+                return false;
+            }
+        }
+        // check min price
+        if(valueFilter.startYear.value != ''){
+            if(item.startYear != valueFilter.startYear.value){
+                return false;
+            }
+        }
+        //  check max price
+        if(valueFilter.endYear.value != ''){
+            if(item.endYear != valueFilter.endYear.value){
+                return false;
+            }
+        }
+
+
+        return true;
+    })
+    showProduct(productFilter);
+})
+
+
+
+</script>
+
+{% endblock javascripts %}

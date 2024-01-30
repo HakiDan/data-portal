@@ -1,0 +1,458 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profile {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+<link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/v/dt/dt-1.13.7/sl-1.7.0/datatables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+<link rel="stylesheet" href="/static/assets/css/table.css">
+<link rel="stylesheet" href = "https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+
+<style>
+
+/* tr { border:none !important; } */
+  
+.dataTables_filter input::placeholder {
+  color: #adb5bd;
+  font-size: 0.875rem; /* Change this color to the desired text color */
+  font-family: "Open Sans";
+}
+
+.dataTables_wrapper .dataTables_filter label {
+    margin: 0;
+}
+
+td.dataTables_empty {
+  font-size: 0.875rem;
+}
+
+table.dataTable tbody td {
+    word-break: break-word;
+    vertical-align: top;
+}
+
+label, .form-label {
+    font-size: 0.875rem;
+    margin-bottom: 0%;
+    color: #252f40;
+    margin-left: 0.25rem;
+}
+
+.btn {
+  margin: auto;
+}
+
+/* Change focus color for form-select when it is click and focused */
+.form-select:focus {
+  border-color: #76b2e8;
+  box-shadow: 0 0 0 0.15rem rgba(118,178,232,255);
+}
+
+</style>
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+<div class="card" style="min-height: 85vh; background-color: #e2e2e2; margin: 26px;">        
+  <div class="card m-4" style="margin:auto; background-color: transparent; box-shadow: none; margin: 26px;">
+      <div class="container-fluid" style="min-width: 10vh;">
+        <div class="card-body" style="min-height: 80vh; min-width: 10vh;">
+          <div class="card text-white my-5" style="border-radius: 1rem; background-color: white; width: 600px; min-height: 10vh; margin: auto;">
+            <div class="card-body p-5 mb-0" style="height: fit-content;">
+              <div class="mt-md-0 p-0 mb-0">
+                <div class="card-header p-4 pt-0" style="height: 10%;">
+                  <h5 class="font-weight-bolder" style="text-align: center;">DAFTAR PENGGUNA</h5>
+                </div>
+  
+                {% for message in messages %}
+                  <div class="alert {{ message.tags }} alert-dismissible fade show my-4" role="alert" style="text-align: center; padding-left: 50px;">             
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+  
+                <form role="form text-left" method="POST" action="" id="register_form">
+                  {% csrf_token %}
+                    <div class="mb-3" style="color: #d1d1d1;">
+                      {{ form.username }}
+                      <i style="font-size: smaller; color:#808080;">{{ form.username.help_text }}</i>
+                      <span id="email-error" style="color: red;"></span> <!-- Error message container for username email -->
+                    </div>
+                    <span style="color:red">{{ form.username.errors }}</span>
+
+                    <div class="mb-3" style="text-align: left;">
+                      {{ form_profile.is_lead }}
+                      <label for="box" style="color: black; font-size: 0.875rem;">Ketua kepada Inisiatif?</label>
+                    </div>
+  
+                    <div class="mb-3" style="color: #d1d1d1;">
+                      {{ form.first_name }}
+                      <span id="first-name-error" style="color: red;"></span> <!-- Error message container for first name -->
+                    </div>
+                    
+                    <select class = "form-select mb-3" id="agency"
+                      {{ form_profile.agency_name }}
+                    </select>
+                    <span id="agency-error" style="color: red;"></span> <!-- Error message container for agency dropdown -->
+  
+                    <div style="color: #d1d1d1;">
+                      {{ form_profile.phone_number }}
+                      <i style="font-size: smaller; color:#808080">{{ form_profile.phone_number.help_text }}</i>
+                    </div>
+                    <div class="mb-3">
+                      <span id="phone-number-error" style="color: red;"></span> <!-- Error message container for phone_number -->
+                    </div>
+                    <span style="color:red">{{ form_profile.phone_number.errors }}</span>
+
+                    <select
+                      {{ form_profile.dq_name }}
+                    </select>
+                    
+                    <div class="mb-3">
+                      <table id="table" class="display nowrap cell-border" style="width:500px; color: black;">
+                        <thead>
+                          <tr>
+                            <th style="padding: 0%;"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for init in form_profile.init_id_assc %}
+                          <tr>
+                            <td style="text-align: left; font-size: 0.875rem;">{{ init }}</td>
+                          </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+
+                  <div class="text-center">
+                    <button type="submit" name="login" class="btn bg-gradient-info w-50 mt-4 mb-0" style="font-size: 0.875rem">DAFTAR</button>
+                  </div>
+                </form>
+                
+                <!-- <div class="text-center pt-3" style="text-align: center; color: black; font-size: 0.875rem;">
+                  Akaun sudah didaftarkan? <b id="check_username_id" style="text-align: center; color: blue; cursor: pointer; text-decoration: underline;">Sila sunting di sini.</b></a>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/fixedcolumns/4.2.2/js/dataTables.fixedColumns.min.js"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-1.13.7/sl-1.7.0/datatables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+  // Dynamic validation for the username field
+  document.getElementById('id_username').addEventListener('input', function() {
+    const emailInput = this.value.trim();
+    const emailError = document.getElementById('email-error'); // Error message
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isEmailValid = emailRegex.test(emailInput);
+
+    if (!isEmailValid) {
+        emailError.textContent = 'Sila masukkan format emel yang sah.';
+    } else {
+        emailError.textContent = ''; // Clear the error message if the email is valid
+    }
+  });
+
+  // Validate first name field
+  document.getElementById('id_first_name').addEventListener('input', function() {
+    const firstNameInput = this.value.trim();
+    const firstNameError = document.getElementById('first-name-error'); // Error message container
+
+    if (firstNameInput === '') {
+      firstNameError.textContent = 'Nama pertama diperlukan.';
+    } else if (firstNameInput.length < 5) {
+      firstNameError.textContent = 'Nama pertama mesti lebih daripada 5 aksara.';
+    } else {
+      firstNameError.textContent = ''; // Clear the error message if the input is valid
+    }
+  });
+
+  // Dynamic validation for the phone_number field
+  document.getElementById('id_phone_number').addEventListener('input', function() {
+      const phoneNumberInput = this.value.trim();
+      const phoneNumberError = document.getElementById('phone-number-error'); // Error message container
+
+      // Regular expression to allow only numeric values
+      const numericRegex = /^\+?[0-9]+$/;
+
+      if (!numericRegex.test(phoneNumberInput) || phoneNumberInput.length < 12) {
+          phoneNumberError.textContent = 'Sila masukkan format nombor telefon yang sah.';
+      } else {
+          phoneNumberError.textContent = ''; // Clear the error message if the input is valid
+      }
+  });
+  
+
+</script>
+
+<script>
+  $(document).ready(function () {
+    var table = $('#table').DataTable({
+        
+      //Columns definition
+      columnDefs: [
+        {
+          orderable: false,
+          targets: [0],
+          render: function ( data, type, row ) 
+            {
+                return '<span style="white-space:wrap">' + data + "</span>";  
+            }
+        },
+      ],
+
+      //To remove header from the datatables
+      "drawCallback": function( settings ) {
+      $("#selector thead").remove(); } ,
+
+
+      order: [],
+      fixedWidth: true,
+      scrollX: false,
+      scrollY: '390px',
+      autowidth: false,
+      paginate: false,
+
+      //Higlight Search
+      mark: true,
+
+      //Buttons and Tables Positioning
+      dom:    "<'row'<'col-sm-12 col-md-12'f>>" +
+              "<'row'<'col-sm-12'tr>>",
+
+      //Buttons features and css
+      buttons: [
+        {
+          text: 'SENARAI UTAMA',
+          className: 'btn btn-default btn-sm-add',
+
+          action: false,
+        }
+      ],
+
+      scrollCollapse: true,
+
+      // Labelling
+      language: {
+        "search": "",
+        "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+        "zeroRecords": "Tiada inisiatif ditemui",
+        "thousands": "'",
+        "decimal": ".",
+        "paginate": {
+                    "previous": "<",
+                    "next": ">"
+                    },
+      },
+    });
+
+    $('[type=search]').each(function () {
+        $(this).attr("placeholder", "Nama Inisiatif");
+        
+        // $(this).after('<span class="fa fa-search"></span>');
+    })
+    .css(
+      {
+        'width':'504px',
+        'height':'40.39px',
+        'display':'inline-block', 
+        'border':'1px solid #d2d6da', 
+        'border-radius':'0.5rem', 
+        'margin':'0%',
+        'font-size':'0.875rem',
+        'padding':'8px 12px',
+        'background-color':'transparent',
+      }
+    );
+    // $( ".dataTables_filter input" ).css( "border", "3px solid lightblue" );
+  });
+
+</script>
+
+<script>
+
+  document.getElementById('box1').addEventListener("click", reveal1);
+
+    function reveal1()
+    {
+    if(document.getElementById('box1').checked)
+      {
+        document.getElementById("id_password1").type='text';
+      }
+    else {
+      document.getElementById("id_password1").type='password';
+      }
+    }
+
+  document.getElementById('box2').addEventListener("click", reveal2);
+
+    function reveal2()
+    {
+    if(document.getElementById('box2').checked)
+      {
+        document.getElementById("id_password2").type='text';
+      }
+    else {
+      document.getElementById("id_password2").type='password';
+      }
+    }
+</script>
+
+<script>
+  document.querySelector('#register_form').addEventListener('submit', function(e) {
+    var form = this;
+    e.preventDefault();
+    
+    Swal.fire({
+        icon: 'warning',
+        title: 'Sahkan Pendaftaran Akaun Baru?',
+        text: 'Anda pasti anda mahu sahkan pendaftaran akaun ini?',
+        showCancelButton: true,
+        cancelButtonText: 'Tidak',
+        showLoaderOnConfirm: true,
+        confirmButtonText: 'Sahkan',
+        confirmButtonColor: '#7AC142',
+        focusConfirm: false,
+        allowOutsideClick: false
+    })
+    .then(function (result) {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+  });
+
+  var win = navigator.platform.indexOf('Win') > -1;
+  if (win && document.querySelector('#sidenav-scrollbar')) {
+    var options = {
+      damping: '0.5'
+    }
+    Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+  }
+  
+  $(document).ready(function(){
+    $('#agency').change(function(){
+     if ($("#agency option:selected").text() == "Lain-lain") {
+      var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+      Swal.fire({
+        title: 'Masukkan nama agensi',
+        html:
+        '<label style="font-size:small">Nama akronim agensi:</label><input id="abbr" class="mb-3 swal2-input">' +
+        '<label style="font-size:small">Nama penuh agensi:</label><input id="fullname" class="mb-3 swal2-input">',
+        showCancelButton: true,
+        cancelButtonText:'Batal',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Hantar',
+        confirmButtonColor: '#7AC142',
+        allowOutsideClick: false,
+        returnInputValueOnDeny: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                agency_abbr = $('#abbr').val();
+                agency_fullname = $('#fullname').val();
+                if (agency_abbr !== null && agency_fullname !== null) {
+                    $.ajax({
+                        method:'POST',
+                        url:"{% url 'add_agency' %}",
+                        headers: {'X-CSRFToken': csrftoken},
+                        data : {
+                          agency_abbr:agency_abbr,
+                          agency_fullname:agency_fullname,
+                          csrfmiddlewaretoken : csrftoken,
+                        },
+                        success:function(data)
+                        {
+                          Swal.fire({
+                            position: 'mid',
+                            icon: 'success',
+                            text: 'Agensi ' + agency_abbr + ' telah berjaya ditambah',
+                            showConfirmButton: false,
+                            timer: 1500
+                          }).then(function(){
+                            location.reload();
+                        })
+                        },
+                    })
+                }
+            }
+          })
+        }
+      })
+    })
+
+  document.getElementById("check_username_id").addEventListener("click", function() {
+    check_username();
+  });
+  function check_username() {
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    Swal.fire({
+        title: 'Semak akaun pengguna',
+        input: 'text',
+        inputPlaceholder: 'Sila masukkan emel pengguna',
+        showCancelButton: true,
+        cancelButtonText:'Batal',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Semak',
+        confirmButtonColor: '#7AC142',
+        allowOutsideClick: false,
+        returnInputValueOnDeny: true,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (result.value !== null) {
+                    $.ajax({
+                        method:'POST',
+                        url:"{% url 'check_username_exist' %}",
+                        headers: {'X-CSRFToken': csrftoken},
+                        data : {
+                          username_name: result.value,
+                          csrfmiddlewaretoken : csrftoken,
+                        },
+                        success:function(data)
+                        {
+                          if (data.pk !== null) {
+                            window.location = data.urls;
+                          }
+                          else {
+                            Swal.fire({
+                              position: 'mid',
+                              icon: 'warning',
+                              text: 'Nama pengguna belum didaftarkan',
+                              showConfirmButton: false,
+                              timer: 1500
+                            })
+                          }
+                        },
+                    })
+                }
+            }
+          })
+        }
+</script>
+  
+{% endblock javascripts %}

@@ -1,0 +1,322 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% if colCountTotal != 0 %}
+<div class="container-fluid py-4">
+  <div class="card" style="min-height: 84vh;">
+    <div class="card-header p-4" style="height: 5%">
+      <h5><b>PEMBETULAN DATA</b></h5>
+      <p>Sila ganti nilai terkini kepada nilai standard</p>
+    </div>
+    <div class="card-body p-4 pt-0" style="height: 95%">
+      <div class="table-responsive p-0" style="height: 100%;">
+        <tr>
+          <form id="value-replacement">
+            {% if col_gender|length != 0 %}
+              <h6 style="margin-top: 20px; margin-bottom: 20px;">Kolum: jantina_ind</h6>
+              {% for col in col_gender %}
+                <form name="Item_1" method="POST" id="submit-jantina-ind" enctype="multipart/form-data" style="margin-bottom: 10px;">
+                  {% csrf_token %}
+                  <div class="container-fluid" style="padding: 0px;">
+                    <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" disabled value="{{col|safe}}" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                      </div>
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" hidden value="{{ file_name }}" name="file_name">
+                        <select name="dropdown-std_gender" id="dropdown-{{col|safe}}" class="Input" style="height: 50px; width: 100%; background-color: #F9F6EE; float: center; border-radius: 10px;">
+                          <option value="-">Sila Pilih</option>
+                          {% for gender in std_gender %}
+                            <option value="{{ gender }}">{{ gender }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-lg-2">
+                        <button type="button" class="btn btn-info" id = "submit-{{col|safe}}"
+                        style="height: 50px; width: 100%; background-color: #DF0991;">
+                        Ganti
+                        </button>
+                        <script type="text/javascript">
+                          document.getElementById('submit-{{col|safe}}').addEventListener("click", function() {
+                            submit_value('submit-value-{{col|safe}}', 'dropdown-{{col|safe}}', '{{col|safe}}', 'jantina_ind');
+                          });
+                        </script>
+                      </div>
+                    </div>
+                  </div>   
+                </form>
+              {% endfor %}
+            {% endif %}
+              
+            {% if col_race|length != 0 %}
+              <h6 style="margin-top: 20px; margin-bottom: 20px;">Kolum: bangsa_ind</h6>
+              {% for col in col_race %}
+                <form name="Item_1" method="POST" id="submit-bangsa-ind" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="container-fluid" style="padding: 0px;">
+                    <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                      <div class="col-lg-5">
+                        <input type="text" disabled value="{{col|safe}}" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                      </div>
+                      <div class="col-lg-5">
+                        <input type="text" hidden value="{{ file_name }}" name="file_name">
+                        <select name="dropdown-std_race" id="dropdown-{{col|safe}}" class="Input" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                          <option value="-">Sila Pilih</option>
+                          {% for race in std_race %}
+                            <option value="{{ race }}">{{ race }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-lg-2">
+                        <button type="button" class="btn btn-info" id = "submit-{{col|safe}}"
+                        style="height: 50px; width: 100%; background-color: #DF0991;">
+                        Ganti
+                        </button>
+                        <script type="text/javascript">
+                          document.getElementById('submit-{{col|safe}}').addEventListener("click", function() {
+                            submit_value('submit-value-{{col|safe}}', 'dropdown-{{col|safe}}', '{{col|safe}}', 'bangsa_ind');
+                          });
+                        </script>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              {% endfor %}
+            {% endif %}
+            
+            {% if col_state|length != 0 %}
+              <h6 style="margin-top: 20px; margin-bottom: 20px;">Kolum: negeri_ind/negeri/negeri_entiti</h6> 
+              {% for col in col_state %}
+                <form name="Item_1" method="POST" id="submit-negeri-ind" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="container-fluid" style="padding: 0px;">
+                    <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                      <div class="col-lg-5">
+                        <input type="text" disabled value="{{col|safe}}" id="{{col|safe}}" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                      </div>
+                      <div class="col-lg-5">
+                        <input type="text" hidden value="{{ file_name }}" name="file_name">
+                        <select name="dropdown-std_state" id="dropdown-{{col|safe}}" class="Input" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                          <option value="-">Sila Pilih</option>
+                          {% for state in std_state %}
+                            <option value="{{ state }}">{{ state }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-lg-2">
+                        <button type="button" class="btn btn-info" id = "submit-{{col|safe}}"
+                        style="height: 50px; width: 100%; background-color: #DF0991;">
+                        Ganti
+                        </button>
+                        <script type="text/javascript">
+                          document.getElementById('submit-{{col|safe}}').addEventListener("click", function() {
+                            submit_value('submit-value-{{col|safe}}', 'dropdown-{{col|safe}}', '{{col|safe}}', 'negeri_ind');
+                          });
+                        </script>
+                      </div>
+                    </div>
+                  </div> 
+                </form>
+              {% endfor %}
+            {% endif %}
+
+            {% if col_biz_ownership_type|length != 0 %}
+              <h6 style="margin-top: 20px; margin-bottom: 20px;">Kolum: jenis_entiti</h6>
+              {% for col in col_biz_ownership_type %}
+                <form name="Item_1" method="POST" id="submit-jenis-entiti" enctype="multipart/form-data" style="margin-bottom: 10px;">
+                  {% csrf_token %}
+                  <div class="container-fluid" style="padding: 0px;">
+                    <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" disabled value="{{col|safe}}" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                      </div>
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" hidden value="{{ file_name }}" name="file_name">
+                        <select name="dropdown-std_biz_ownership_type" id="dropdown-{{col|safe}}" class="Input" style="height: 50px; width: 100%; background-color: #F9F6EE; float: center; border-radius: 10px;">
+                          <option value="-">Sila Pilih</option>
+                          {% for biz_own in std_biz_ownership_type %}
+                            <option value="{{ biz_own }}">{{ biz_own }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-lg-2">
+                        <button type="button" class="btn btn-info" id = "submit-{{col|safe}}"
+                        style="height: 50px; width: 100%; background-color: #DF0991;">
+                        Ganti
+                        </button>
+                        <script type="text/javascript">
+                          document.getElementById('submit-{{col|safe}}').addEventListener("click", function() {
+                            submit_value('submit-value-{{col|safe}}', 'dropdown-{{col|safe}}', '{{col|safe}}', 'jenis_entiti');
+                          });
+                        </script>
+                      </div>
+                    </div>
+                  </div>   
+                </form>
+              {% endfor %}
+            {% endif %}
+
+            {% if col_bumi_status|length != 0 %}
+              <h6 style="margin-top: 20px; margin-bottom: 20px;">Kolum: status_bumiputera_entiti</h6>
+              {% for col in col_bumi_status %}
+                <form name="Item_1" method="POST" id="submit-status-bumiputera-entiti" enctype="multipart/form-data" style="margin-bottom: 10px;">
+                  {% csrf_token %}
+                  <div class="container-fluid" style="padding: 0px;">
+                    <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" disabled value="{{col|safe}}" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                      </div>
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" hidden value="{{ file_name }}" name="file_name">
+                        <select name="dropdown-std_bumi_status" id="dropdown-{{col|safe}}" class="Input" style="height: 50px; width: 100%; background-color: #F9F6EE; float: center; border-radius: 10px;">
+                          <option value="-">Sila Pilih</option>
+                          {% for bumi in std_bumi_status %}
+                            <option value="{{ bumi }}">{{ bumi }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-lg-2">
+                        <button type="button" class="btn btn-info" id = "submit-{{col|safe}}"
+                        style="height: 50px; width: 100%; background-color: #DF0991;">
+                        Ganti
+                        </button>
+                        <script type="text/javascript">
+                          document.getElementById('submit-{{col|safe}}').addEventListener("click", function() {
+                            submit_value('submit-value-{{col|safe}}', 'dropdown-{{col|safe}}', '{{col|safe}}', 'status_bumiputera_entiti');
+                          });
+                        </script>
+                      </div>
+                    </div>
+                  </div>   
+                </form>
+              {% endfor %}
+            {% endif %}
+
+            {% if col_biz_sector|length != 0 %}
+              <h6 style="margin-top: 20px; margin-bottom: 20px;">Kolum: sektor_entiti</h6>
+              {% for col in col_biz_sector %}
+                <form name="Item_1" method="POST" id="submit-sektor-entiti" enctype="multipart/form-data" style="margin-bottom: 10px;">
+                  {% csrf_token %}
+                  <div class="container-fluid" style="padding: 0px;">
+                    <div class = "row" style="table-layout: auto; overflow: hidden; width: 100%;">
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" disabled value="{{col|safe}}" style="height: 50px; width: 100%; background-color: #F9F6EE; border-radius: 10px;">
+                      </div>
+                      <div class="col-lg-5" style="text-align: left;">
+                        <input type="text" hidden value="{{ file_name }}" name="file_name">
+                        <select name="dropdown-std_biz_sector" id="dropdown-{{col|safe}}" class="Input" style="height: 50px; width: 100%; background-color: #F9F6EE; float: center; border-radius: 10px;">
+                          <option value="-">Sila Pilih</option>
+                          {% for biz in std_biz_sector %}
+                            <option value="{{ biz }}">{{ biz }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="col-lg-2">
+                        <button type="button" class="btn btn-info" id = "submit-{{col|safe}}"
+                        style="height: 50px; width: 100%; background-color: #DF0991;">
+                        Ganti
+                        </button>
+                        <script type="text/javascript">
+                          document.getElementById('submit-{{col|safe}}').addEventListener("click", function() {
+                            submit_value('submit-value-{{col|safe}}', 'dropdown-{{col|safe}}', '{{col|safe}}', 'sektor_entiti');
+                          });
+                        </script>
+                      </div>
+                    </div>
+                  </div>   
+                </form>
+              {% endfor %}
+            {% endif %}
+          </form>
+        </tr>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+
+{% else %}
+<div class="container-fluid py-4">
+  <div class="row" style="height: 14vh;">
+    <div class="col-lg-9" style="height: 100%;">
+        <div class="card" style="height: 100%;">
+            <div class="card-body p-4">
+              <h5 class="font-weight-bolder">TIADA NILAI YANG PERLU DIGANTI</h5>
+            </div>
+        </div>
+    </div>
+      
+    <div class="col-lg-3">
+      <div class="card" style="height: 100%;">
+        <div class="card-body p-4">
+          <h5 class="font-weight-bolder">TIADA NILAI YANG TIDAK DIKENAL PASTI</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endif %}
+
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+  function submit_value(idIAValue, dropdownID, IAValue, col) {
+    var selectedValue = document.getElementById(dropdownID);
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    
+    Swal.fire({
+      title: "Ganti Kolum",
+      text: "Anda pasti anda mahu kemaskini '" + IAValue + "' dengan '" + selectedValue.value + "' ?",
+      icon: 'warning',
+      showCancelButton: true,
+      cancelButtonText: 'Batal',
+      cancelButtonWidth: 200,
+      confirmButtonColor: '#7AC142',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '  Ya  ',
+      allowOutsideClick: false
+      }).then((result) => {
+      if (result.isConfirmed) {
+        $.ajax({
+          method:'POST',  
+          url:"{% url 'submitValue' %}",
+          headers: {'X-CSRFToken': csrftoken},
+          data : {
+            selectedValue : selectedValue.value,
+            IAValue : IAValue,
+            csrfmiddlewaretoken : csrftoken,
+            col_name : col,
+          },
+          success:function(data){
+            data;
+            console.log(data);
+            Swal.fire(
+          {
+            position: 'middle',
+            icon: 'success',
+            text: 'Nilai sudah diubah',
+            timer: 2000,
+            showConfirmButton: false,
+          }).then(function(){
+            location.reload();
+          })
+        }
+      })
+    }
+  })
+  }
+</script>
+{% endblock javascripts %}

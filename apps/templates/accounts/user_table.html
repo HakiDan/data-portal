@@ -1,0 +1,221 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+  <link rel="stylesheet" href="/static/assets/css/table.css">
+  <!-- <link href="/DataTables/datatables.css"> -->
+
+
+  <style>
+
+  tr { height: 5.75vh; }
+
+  </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="card" style="min-height:10vh">
+        <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+            <div style="min-height: 10vh;">
+
+                <table id="table" class="display nowrap cell-border" style="width:100%; color: black;">
+                    <thead>
+                        <tr>
+                        <th><b>No.</b></th>
+                        <th><b>Sunting</b></th>
+                        <th><b>Nama Agensi<b></th>
+                        <th><b>Nama Pengguna<b></th>
+                        <th><b>Emel<b></th>
+                        <th><b>Nombor Telefon<b></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for users, object_profile in user_table %}
+                        <tr>
+                            <td></td>
+                            <td>
+                                <a href="{% url 'useredit' users.pk %}">
+                                    <button type="button" style="border: 0px; background-color: transparent"> 
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                </a>
+                            </td>
+                            <td> {{object_profile.agency_name|default:"<i>TIADA DATA</i>"}} </td>
+                            <td> {{users.first_name|default:"<i>TIADA DATA</i>"}} </td>
+                            <td> {{users.email|default:"<i>TIADA DATA</i>"}} </td>
+                            <td> {{object_profile.phone_number|default:"<i>TIADA DATA</i>"}} </td>
+                        </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+
+                <div style="text-align: right; margin-top: 18px;">
+                    <a href="{% url 'register' %}">
+                        <button type="button" class="btn btn-success btn-lg m-0" style="width: 270px;">
+                            DAFTAR PENGGUNA
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ 
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+<script src="/static/assets/js/plugins/chartjs.min.js"></script>
+<script src="/static/assets/js/plugins/Chart.extension.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+
+<script>
+
+//IA Table Setup
+
+$(document).ready(function () {
+    var table = $('#table').DataTable({
+        
+        //Search Filter
+        columnDefs: [
+            {
+                searchable: false,
+                orderable: false,
+                targets: [0,1],
+            },
+
+            {
+                orderable: false,
+                targets: [3,4,5],
+            },
+
+            //Text Align Center
+            { className: 'text-center', targets: [0,1,2,3,4,5] },
+        ],
+        // order: [[2, 'desc']],
+        order: [],
+
+        scrollX: "100%",
+        scrollY: false,
+
+        // "scrollCollapse": true,
+
+        "columns": [
+            { "width": "5%" },
+            { "width": "5%" },
+            { "width": "35%" },
+            { "width": "35%" },
+            { "width": "10%" },
+            { "width": "10%" },
+        ],
+
+        //Higlight Search
+        mark: true,
+
+        //Buttons and Tables Positioning
+        dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                "<'row'<'col-sm-12'tr>>" +
+                "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+        //Buttons features and css
+        buttons: [
+            {
+                text: 'SENARAI PENGGUNA',
+                className: 'btn btn-default btn-sm-add',
+
+                action: false,
+                
+            }
+        ],
+
+        scrollCollapse: true,
+        // paging: false,
+
+        // Labelling
+        language: {
+            "search": "",
+            "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+            // "info": "Menunjukkan _TOTAL_ data",
+            "zeroRecords": "Tiada rekod ditemui",
+            // "infoEmpty":      "Showing 0 to 0 of 0 entries",
+            "infoEmpty":      "Menunjukkan 0 hasil carian",
+            "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+            "thousands": "'",
+            "decimal": ".",
+            "paginate": {
+                    "previous": "<",
+                    "next": ">"
+                    },
+        },
+
+
+        // Filter Column Selection
+        initComplete: function () {
+            this.api()
+                .columns([2])
+                .every(function () {
+                    var column = this;
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw();
+                    
+                    var select = $('<select><option value=""></option></select>')
+                        
+                        .css( {'margin-left': '10px', 'height':'30px'} )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        $( select ).click( function(e) {
+                        e.stopPropagation();
+                        });
+                       
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                });
+        },
+    });
+
+
+    //Index numbering
+    table.on('order.dt search.dt', function () {
+        let i = 1;
+
+        table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
+
+    
+    $('[type=search]').each(function () {
+        // $(this).attr("placeholder", "Search...");
+        $(this).after('<span class="fa fa-search"></span>');
+    });
+});
+
+</script>
+
+{% endblock javascripts %}

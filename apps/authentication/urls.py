@@ -1,0 +1,35 @@
+from django.urls import path
+from .views import (login_view, change_password, change_password_login, 
+                    password_reset_request, password_reset_request_home, 
+                    CustomPasswordResetConfirmView, customLogout, RegisterRequestView,
+                    UserEdit, UserView, check_username_exist, add_agency)
+from django.contrib.auth import views as auth_views
+
+urlpatterns = [
+    path('login/', login_view, name="login"),
+    path("logout/", customLogout, name="logout"),
+    path("user_table/", UserView.as_view(), name="user_table"),
+    path("register/", RegisterRequestView.as_view(), name="register"),
+    path("register/user-edit/<int:pk>", UserEdit.as_view(), name="useredit"),
+    path("register/check-username-exist", check_username_exist, name="check_username_exist"),
+    path("register/add_agency", add_agency, name="add_agency"),
+    path("password/", change_password, name='change_password'),
+    path("password_login/", change_password_login, name='change_password_login'),
+    path("password_reset/", password_reset_request, name="password_reset"),
+    path("password_reset_home/", password_reset_request_home, name="password_reset_home"),
+    path('password_reset/', 
+         auth_views.PasswordResetView.as_view(template_name='accounts/password_reset.html'), 
+         name='password_reset'),
+    path('password_reset_home/', 
+         auth_views.PasswordResetView.as_view(template_name='accounts/password_reset_home.html'), 
+         name='password_reset_home'),
+    path('password_reset/done/', 
+         auth_views.PasswordResetDoneView.as_view(template_name='accounts/password_reset_done.html'), 
+         name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', 
+         CustomPasswordResetConfirmView.as_view(template_name="accounts/password_reset_confirm.html"), 
+         name='password_reset_confirm'),
+    path('reset/done/', 
+         auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'), 
+         name='password_reset_complete'),
+]

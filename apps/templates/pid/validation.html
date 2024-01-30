@@ -1,0 +1,1082 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+    <link rel="stylesheet" href="/static/assets/css/table.css">
+
+    <style>
+
+        tr { height: 5.75vh; }
+
+        select.col-search {
+            width: 80%;
+        }
+
+        th[name="hidden-col"]{
+            display: none;
+        }
+
+        td[name="hidden-cell"]{
+            display: none;
+        }
+    </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% if user.userprofile.is_lead is True %}
+<div class="container-fluid py-4">
+    <div class="card" style="min-height: 10vh">
+        <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+            <div style="min-height: 10vh;">
+                <table id="table2" class="display nowrap cell-border" style="width:100%; color: black;">      
+                    <thead>
+                        <th> </th>
+                        <th>Tarikh </th>
+                        <th>Agensi Pelaksana </th>
+                        <th>Indeks Inisiatif </th>
+                        <th>Nama Inisiatif </th>
+                        <th name="hidden-col">Penerima Bulan Lepas </th>
+                        <th name="hidden-col">Penerima Bulan Ini </th>
+                        <th name="hidden-col">Jumlah Bulan Lepas </th>
+                        <th name="hidden-col">Jumlah Bulan Ini </th>
+                        <th name="hidden-col">Jumlah Yang Dipohon </th>
+                        <th name="hidden-col">Jumlah Yang Diluluskan </th>
+                        <th name="hidden-col">Status </th>
+                        <th style="text-align: center;">Catatan </th>
+                        <th name="hidden-col">Disahkan Oleh </th>
+                        <th name="hidden-col">Tarikh Disunting </th>
+                        <th>Tindakan </th>
+                    </thead>
+                    <tbody>
+                        {% for object in object_push %}
+                            <tr>
+                                <td>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 16 16">
+                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                                    </svg>
+                                    <span id="{{object}}"></span> 
+                                    <script>
+                                        document.getElementById("{{object}}").addEventListener("click", function() {
+                                          format("{{object}}");
+                                        });
+                                    </script>
+                                </td>
+                                <td>{{object.reporting_date|date:"Y-m-d"}}</td>
+                                <td>{{object.agency}}</td>
+                                <td>{{object.init_id}}</td>
+                                <td style="text-align: left" onclick="init_name()">{{object.init_name}}</td>
+                                <td name="hidden-cell">
+                                    {% load humanize %}
+                                    {{ object.bene_last_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td name="hidden-cell">
+                                    {% load humanize %}
+                                    {{ object.bene_this_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td name="hidden-cell">
+                                    {% load humanize %}
+                                    {{ object.disb_last_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td name="hidden-cell">
+                                    {% load humanize %}
+                                    {{ object.disb_this_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td name="hidden-cell">
+                                    {% load humanize %}
+                                    {{ object.applied_amount|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td name="hidden-cell">
+                                    {% load humanize %}
+                                    {{ object.approved_amount|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td name="hidden-cell">{{object.status}}</td>
+                                <td style="text-align: left; cursor: pointer;" id="{{object.pk}}, {{object.cur_note|safe}}">
+                                    {{object.cur_note|default:"<i>TIADA DATA</i>"|safe|truncatechars:25}}
+                                    <script>
+                                        document.getElementById("{{object.pk}}, {{object.cur_note|safe}}").addEventListener("click", function() {
+                                          remark_lead("{{object.pk}}", "{{object.cur_note|safe}}", "{{object.init_id}}");
+                                        });
+                                    </script>
+                                </td>
+                                <td name="hidden-cell">{{object.validate_by}}</td>
+                                <td name="hidden-cell">{{object.date_modified_note}}</td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col" style="padding-right: 0px;">
+                                            <form method="POST" action="" style="text-align: center;">
+                                                {% csrf_token %}
+                                                <button id="submitbutton-{{object.pk}}" type="button" style="border: 0px; background-color: transparent;"> 
+                                                    <i class="fa fa-check-circle" style="color: green;padding: 0px;"></i>
+                                                </button>
+                                                <script>
+                                                    document.getElementById("submitbutton-{{object.pk}}").addEventListener("click", function() {
+                                                      push("{{object.pk}}", "{{object.init_id}}");
+                                                    });
+                                                </script>
+                                            </form>
+                                        </div>
+                                        <div class="col" style="padding-left: 0px; padding-right: 10px;">
+                                            <form method="POST" action="">
+                                                {% csrf_token %}
+                                                <button id="deletebutton-{{object.pk}}" type="button" style="border: 0px; background-color: transparent"> 
+                                                    <i class="fa fa-times-circle" style="color: red;"></i>
+                                                </button>
+                                                <script>
+                                                    document.getElementById("deletebutton-{{object.pk}}").addEventListener("click", function() {
+                                                        delete_item("{{object.pk}}", "{{object.init_id}}", "{{object.cur_note|safe}}");
+                                                    });
+                                                </script>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+                <div style="text-align: right; margin-top: 18px;">
+                    <form method="POST" action="">
+                        {% csrf_token %}
+                        <button id="finalizeButton" button type="button" class="btn btn-success btn-lg" style="width: 220px; margin: 0px;"> 
+                            JANA LAPORAN
+                        </button>
+                        <script>
+                            document.getElementById("finalizeButton").addEventListener("click", function() {
+                                push_button_report();
+                            });
+                        </script>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<div class="container-fluid py-4">
+    <div class="card" style="min-height: 10vh">
+        <div class="card-body px-4" style="height: 100%; padding-bottom: 1.5rem; padding-top: 0%;">
+            <div style="min-height: 10vh;">
+                <table id="table" class="display nowrap cell-border" style="width:100%; color: black;">      
+                    <thead>
+                        <th>No. </th>
+                        <th>Tarikh </th>
+                        <th>Agensi Pelaksana </th>
+                        <th>Indeks Inisiatif </th>
+                        <th>Nama Inisiatif </th>
+                        <th>Penerima Bulan Lepas </th>
+                        <th>Penerima Bulan Ini </th>
+                        <th>Jumlah Bulan Lepas </th>
+                        <th>Jumlah Bulan Ini </th>
+                        <th>Jumlah Yang Dipohon </th>
+                        <th>Jumlah Yang Diluluskan </th>
+                        <th>Status </th>
+                        <th style="text-align: center;">Catatan </th>
+                        <th style="text-align: center;">Sebab Ditolak </th>
+                        <th style="text-align: center;">Tarikh Disunting </th>
+                        <th>Pengesahan </th>
+                        <th style="display:none"></th>
+                    </thead>
+                    <tbody>
+                        {% for object in object_validate %}
+                            <tr class="y_n">
+                                <td> </td>
+                                <td>{{object.reporting_date|date:"Y-m-d"}}</td>
+                                <td>{{object.agency}}</td>
+                                <td>{{object.init_id}}</td>
+                                <td>{{object.init_name}}</td>
+                                <td>
+                                    {% load humanize %}
+                                    {{ object.bene_last_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td>
+                                    {% load humanize %}
+                                    {{ object.bene_this_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td>
+                                    {% load humanize %}
+                                    {{ object.disb_last_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td>
+                                    {% load humanize %}
+                                    {{ object.disb_this_month|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td>
+                                    {% load humanize %}
+                                    {{ object.applied_amount|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td>
+                                    {% load humanize %}
+                                    {{ object.approved_amount|default:"<i>TIADA DATA</i>"|intcomma }}
+                                </td>
+                                <td>{{object.status}}</td>
+                                <td style="text-align: left; cursor: pointer;" id="{{object.pk}}, {{object.cur_note|safe}}">
+                                    {{object.cur_note|default:"<i>TIADA DATA</i>"|safe|truncatechars:25}}
+                                </td>
+                                <script>
+                                    document.getElementById("{{object.pk}}, {{object.cur_note|safe}}").addEventListener("click", function() {
+                                      remark("{{object.pk}}", "{{object.cur_note|safe}}", "{{object.init_id}}", "{{object.init_name}}");
+                                    });
+                                </script>
+                                <td style="text-align: left; cursor: pointer;" id="{{object.pk}}, {{object.failed_reason_user|safe}}">
+                                    {{object.failed_reason_user|default:"<i>TIADA DATA</i>"|safe}}
+                                </td>
+                                <script>
+                                    document.getElementById("{{object.pk}}, {{object.failed_reason_user|safe}}").addEventListener("click", function() {
+                                      reject_note("{{object.pk}}", "{{object.failed_reason_user|safe}}");
+                                    });
+                                </script>
+                                <td>{{object.date_modified_note}}</td>
+                                <td>
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+                                        <button id="submitbutton-{{object.pk}}" type="button" style="border: 0px; background-color: transparent;"> 
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                        <script>
+                                            document.getElementById("submitbutton-{{object.pk}}").addEventListener("click", function() {
+                                              validate("{{object.pk}}", "{{object.init_id}}");
+                                            });
+                                        </script>
+                                    </form>
+                                </td>
+                                <td style="display:none">{{object.is_validate}}</td>
+                            </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="/static/assets/js/read_remark.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/static/assets/js/plugins/chartjs.min.js"></script>
+<script src="/static/assets/js/plugins/Chart.extension.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+    $('#table tr.y_n td').each(function(){
+        if ($(this).text() == 'Gagal') {
+            $(this).parent().css('background-color','#f8d7da');
+            }
+        }); 
+    });
+
+$(function(){
+    var rowCount = $('#table2 tbody tr').length;
+    if(rowCount == 0){
+        $('#finalizeButton').removeAttr('disabled');
+    } else {
+        $('#finalizeButton').attr('disabled','disabled');
+    }
+});
+    
+function push_button_report() {
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    Swal.fire({
+        title: "Jana Laporan",
+        text: "Adakah anda mahu menjana laporan?",
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Batal',
+        cancelButtonWidth: 200,
+        confirmButtonColor: '#7AC142',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '  Ya  ',
+        allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method:'POST',
+                    url:"{% url 'push_data_report' %}",
+                    headers: {'X-CSRFToken': csrftoken},
+                    data : {
+                        csrfmiddlewaretoken : csrftoken,
+                    },
+                    success:function(data)
+                    {
+                        data;
+                        Swal.fire(
+                    {
+                        position: 'mid',
+                        icon: 'success',
+                        text: 'Laporan telah dijana',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(function(){
+                        location.reload();
+                    })
+                    }
+                })
+            }
+    })
+}
+
+function validate(pk, init_id) {
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    Swal.fire({
+        title: "Pengesahan Data",
+        text: "Anda pasti anda mahu sahkan data?",
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Batal',
+        cancelButtonWidth: 200,
+        confirmButtonColor: '#7AC142',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '  Ya  ',
+        allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method:'POST',
+                    url:"{% url 'validate_data' %}",
+                    headers: {'X-CSRFToken': csrftoken},
+                    data : {
+                        pk : pk,
+                        init_id : init_id,
+                        csrfmiddlewaretoken : csrftoken,
+                    },
+                    success:function(data)
+                    {
+                        data;
+                        Swal.fire(
+                    {
+                        position: 'mid',
+                        icon: 'success',
+                        text: 'Data telah disahkan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(function(){
+                        location.reload();
+                    })
+                    }
+                })
+            }
+    })
+}
+
+function push(pk, init_id) {
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    Swal.fire({
+        title: "Penghantaran Data",
+        text: "Anda pasti anda mahu hantar data?",
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Batal',
+        cancelButtonWidth: 200,
+        confirmButtonColor: '#7AC142',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '  Ya  ',
+        allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    method:'POST',
+                    url:"{% url 'push_data' %}",
+                    headers: {'X-CSRFToken': csrftoken},
+                    data : {
+                        pk : pk,
+                        init_id : init_id,
+                        csrfmiddlewaretoken : csrftoken,
+                    },
+                    success:function(data)
+                    {
+                        data;
+                        Swal.fire(
+                    {
+                        position: 'mid',
+                        icon: 'success',
+                        text: 'Data telah dihantar',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(function(){
+                        location.reload();
+                    })
+                    }
+                })
+            }
+    })
+}
+
+function delete_item(pk, init_id, cur_note) {
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    Swal.fire({
+        title: "Penolakan Data",
+        text: "Anda pasti anda mahu menolak penghantaran data?",
+        icon: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Batal',
+        cancelButtonWidth: 200,
+        confirmButtonColor: '#7AC142',
+        cancelButtonColor: '#d33',
+        confirmButtonText: '  Ya  ',
+        allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Sebab Ditolak',
+                    input: 'textarea',
+                    inputPlaceholder: 'Nyatakan sebab data ditolak...',
+                    inputValue: '',
+                    html: '<p id="written"></p>',
+                    showCancelButton: true,
+                    cancelButtonText:'Batal',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Simpan',
+                    confirmButtonColor: '#7AC142',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        $(Swal.getInput()).keyup(function() {
+                            currentlength = this.value.length;
+                            $("#written").html(currentlength+" aksara");
+                        });
+                    }
+                    }).then((result) => {
+                        if (result.value !== null) {
+                            $.ajax({
+                                method:'POST',
+                                url:"{% url 'delete_data' %}",
+                                headers: {'X-CSRFToken': csrftoken},
+                                data : {
+                                    pk: pk,
+                                    init_id : init_id,
+                                    text: result.value,
+                                    cur_note: cur_note,
+                                    csrfmiddlewaretoken : csrftoken,
+                                },
+                                success:function(data)
+                                {
+                                    data;
+                                    Swal.fire(
+                                    {
+                                        position: 'middle',
+                                        icon: 'success',
+                                        text: 'Data telah ditolak',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    }).then(function(){
+                                        location.reload();
+                                    })
+                                }
+                            })
+                        }
+                    })
+            }
+        })
+    }
+
+function remark(pk, note, init_id, init_name) {
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    Swal.fire({
+        title: 'Catatan',
+        input: 'textarea',
+        inputHeight: '1000',
+        inputPlaceholder: 'Tulis catatan anda di sini...',
+        inputValue: note,
+        html: '<p id="written"></p>',
+        showCancelButton: true,
+        cancelButtonText:'Batal',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Simpan',
+        confirmButtonColor: '#1E90FF',
+        showDenyButton: true,
+        denyButtonText: 'Simpan & Hantar',
+        denyButtonColor: '#7AC142',
+        allowOutsideClick: false,
+        returnInputValueOnDeny: true,
+        didOpen: () => {
+            $(Swal.getInput()).keyup(function() {
+                currentlength = this.value.length;
+                $("#written").html(currentlength+" aksara");
+            });
+        }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (result.value !== null) {
+                    $.ajax({
+                        method:'POST',
+                        url:"{% url 'edit_note' %}",
+                        headers: {'X-CSRFToken': csrftoken},
+                        data : {
+                            pk : pk,
+                            init_id : init_id,
+                            init_name : init_name,
+                            text: result.value,
+                            csrfmiddlewaretoken : csrftoken,
+                        },
+                        success:function(data)
+                        {
+                            data;
+                            Swal.fire({
+                                position: 'mid',
+                                icon: 'success',
+                                text: 'Catatan telah disimpan',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function(){
+                                location.reload();
+                        })
+                        }
+                    })
+                }
+            }
+            else if (result.isDenied) {
+                if (result.value !== null) {
+                    $.ajax({
+                        method:'POST',
+                        url:"{% url 'validate_data_comments' %}",
+                        headers: {'X-CSRFToken': csrftoken},
+                        data : {
+                            pk : pk,
+                            init_id : init_id,
+                            init_name : init_name,
+                            text: result.value,
+                            csrfmiddlewaretoken : csrftoken,
+                        },
+                        success:function(data)
+                        {
+                            data;
+                            Swal.fire({
+                                position: 'mid',
+                                icon: 'success',
+                                text: 'Data telah disahkan',
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function(){
+                                location.reload();
+                        })
+                        }
+                    })
+                }
+            }
+            else {
+                return false;
+                }
+            })
+        }
+
+function remark_lead(pk, note, init_id) {
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    Swal.fire({
+        title: 'Catatan',
+        text: note,
+        showCancelButton: true,
+        cancelButtonText:'OK',
+        cancelButtonColor: 'grey',
+        confirmButtonText: 'Sahkan',
+        confirmButtonColor: '#7AC142',
+        showDenyButton: true,
+        denyButtonText: 'Tolak',
+        denyButtonColor: '#d33',
+        allowOutsideClick: false,
+        }).then((result) => {
+            if (result.isDenied) {
+                Swal.fire({
+                    title: 'Sebab Ditolak',
+                    input: 'textarea',
+                    inputPlaceholder: 'Nyatakan sebab data ditolak...',
+                    inputValue: '',
+                    html: '<p id="written"></p>',
+                    showCancelButton: true,
+                    cancelButtonText:'Batal',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Simpan',
+                    confirmButtonColor: '#7AC142',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        $(Swal.getInput()).keyup(function() {
+                            currentlength = this.value.length;
+                            $("#written").html(currentlength+" aksara");
+                        });
+                    }
+                    }).then((result) => {
+                        if (result.value !== null) {
+                            $.ajax({
+                                method:'POST',
+                                url:"{% url 'delete_data' %}",
+                                headers: {'X-CSRFToken': csrftoken},
+                                data : {
+                                    pk: pk,
+                                    init_id : init_id,
+                                    text: result.value,
+                                    cur_note: note,
+                                    csrfmiddlewaretoken : csrftoken,
+                                },
+                                success:function(data)
+                                {
+                                    data;
+                                    Swal.fire(
+                                    {
+                                        position: 'middle',
+                                        icon: 'success',
+                                        text: 'Data telah ditolak',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    }).then(function(){
+                                        location.reload();
+                                    })
+                                }
+                            })
+                        }
+                    })
+            }
+            else if (result.isConfirmed) {
+                $.ajax({
+                    method:'POST',
+                    url:"{% url 'push_data_comments' %}",
+                    headers: {'X-CSRFToken': csrftoken},
+                    data : {
+                        pk : pk,
+                        init_id : init_id,
+                        text: result.value,
+                        csrfmiddlewaretoken : csrftoken,
+                    },
+                    success:function(data)
+                    {
+                        data;
+                        Swal.fire({
+                            position: 'mid',
+                            icon: 'success',
+                            text: 'Data telah dihantar',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function(){
+                            location.reload();
+                        })
+                    }
+                })
+            }
+            })
+        }
+</script>
+
+<script>
+
+    function format(object) {
+        return (
+            '<h6><b>MAKLUMAT TAMBAHAN</b></h6>' +
+            '<ul>' +
+            '<li>Penerima Bulan Lepas (RM): ' +
+                object[5] +
+            '</li>' +
+            '<li>Penerima Bulan Ini (RM): '+
+                object[6] +
+            '</li>' +
+            '<li>Jumlah Bulan Lepas (RM): '+
+                object[7] +
+            '</li>' +
+            '<li>Jumlah Bulan Ini (RM): '+
+                object[8] +
+            '</li>' +
+            '<li>Jumlah Yang Dipohon (RM): '+
+                object[9] +
+            '</li>' +
+            '<li>Jumlah Yang Diluluskan (RM): '+
+                object[10] +
+            '</li>' +
+            '<li>Status: '+
+                object[11] +
+            '</li>' +
+            '<li>Disahkan Oleh: '+
+                object[13] +
+            '</li>' +
+            '<li>Tarikh Disunting: '+
+                object[14] +
+            '</li>' +
+            '</ul>'
+        )
+    }
+
+    //Lead PID Table
+    $(document).ready(function () {
+        var table2 = $('#table2').DataTable({
+            
+            //Search Filter
+            columnDefs: [
+                {
+                    searchable: false,
+                    orderable: false,
+                    targets: [0,1,12,15],
+                },
+
+                {   
+                    orderable: false,
+                    targets: [4],
+                    render: function ( data, type, row ) 
+                        {
+                            return '<span style="white-space:wrap">' + data + "</span>";  
+                        }
+                },
+                
+                //Text Align Center
+                { className: 'text-center', targets: [0,1,2,3,15]},
+            ],
+
+            order: [],
+            scrollX: '100%',
+            scrollY: false,
+
+            //Higlight Search
+            mark: true,
+
+            //Buttons and Tables Positioning
+            //Top line : search bar and title
+            //Middle line : Table lenght and height
+            //Bottom line : Adjust pagination button and search result note
+            dom:    "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+            //Buttons features and css
+            buttons: [
+                {
+                    text: 'PENGESAHAN DATA',
+                    className: 'btn btn-default btn-sm-add',
+                    action: false,
+                    
+                    
+                    // action: function () {
+                    //     window.location = "{% url 'additem' %}"
+                    // }
+                    // .css({"width": "220px", "background-color": "#35BAE4", "border-color":"#35BAE4", "margin-bottom": "0%;"})
+                }
+            ],
+
+            scrollCollapse: true,
+            //   paging: false,
+
+            // Labelling
+            language: {
+                "search": "",
+                "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                "zeroRecords": "Tiada rekod ditemui",
+                "infoEmpty":      "Menunjukkan 0 hasil carian",
+                "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                "thousands": "'",
+                "decimal": ".",
+                "paginate": {
+                    "previous": "<",
+                    "next": ">"
+                },
+            },
+
+
+            // Filter Column Selection (Latest)
+            initComplete: function () {
+                this.api()
+                .columns([2,3,4])
+                .every(function (i) {
+                    var column = this;
+                    
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw();
+
+                    if (i == 4)  
+                    {
+                        var select = $('<select><option value=""></option></select>')
+                            
+                        .css( {'margin-left': '10px', 'height':'30px', 'width': '350px'} )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        
+                        $( select ).click( function(e) {
+                            e.stopPropagation();
+                        });
+                        
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    } 
+
+                    else
+                    {
+                        var select = $('<select><option value=""></option></select>')
+                        
+                        .css( {'margin-left': '10px', 'height':'30px', } )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        $( select ).click( function(e) {
+                        e.stopPropagation();
+                        });
+                        
+                        
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+                    
+                });       
+            },
+
+        });
+
+        $('[type=search]').each(function () {
+                // $(this).attr("placeholder", "Search...");
+                // $(this).after('<span class="fa fa-search"></span>');
+            });
+
+        $('#table2 tbody').on('click', 'td:first-child', function () {
+            var tr = $(this).closest('tr');
+            var row = table2.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it.
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open row.
+                //row.child('foo').show();
+                row.child(format(row.data()), "p-0").show();
+                tr.addClass('shown');
+            }
+        });
+    });
+
+
+//============================================================================================================================================================================================================
+
+
+    //PID Table
+
+    $(document).ready(function () {
+        var table = $('#table').DataTable({
+            
+            //Search Filter
+            columnDefs: [
+                {
+                    searchable: false,
+                    orderable: false,
+                    targets: [0,15],
+                },
+
+                {
+                    searchable: false,
+                    targets: [14],
+                },
+
+                {
+                    orderable: false,
+                    targets: [12,13],
+                },
+
+                // Make cell content expand downwards
+                {   
+                    orderable: false,
+                    targets: [4],
+                    render: function ( data, type, row ) 
+                        {
+                            return '<span style="white-space:wrap">' + data + "</span>";  
+                        }
+                },
+                
+                //Text Align Center
+                { className: 'text-center', targets: [0,1,2,3,5,6,7,8,9,10,11,14,15] },
+            ],
+            
+            //   order: [[1, 'desc']],
+            order: [],
+            scrollX: '100%',
+            scrollY: false,
+
+            //Higlight Search
+            mark: true,
+
+            //Buttons and Tables Positioning
+            //Top line : search bar and title
+            //Middle line : Table lenght and height
+            //Bottom line : Adjust pagination button and search result note
+            dom:    "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+            //Buttons features and css repurpose to title
+            buttons: [
+                {
+                    text: 'PENGESAHAN DATA',
+                    className: 'btn btn-default btn-sm-add',
+
+                    action: false,
+        
+                }
+            ],
+
+            scrollCollapse: true,
+
+            // Table Labelling
+            language: {
+                "search": "",
+                "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+                "zeroRecords": "Tiada rekod ditemui",
+                "infoEmpty":      "Menunjukkan 0 hasil carian",
+                "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+                "thousands": "'",
+                "decimal": ".",
+                "paginate": {
+                            "previous": "<",
+                            "next": ">"
+                            },
+            },
+
+
+            // Filter Column Selection (Latest)
+            initComplete: function () {
+
+                this.api()
+                .columns([2,3,4,11])
+                .every(function (i) {
+                    var column = this;
+                       
+                    var table = $('#example').DataTable();
+                    table.columns.adjust().draw();
+
+                    // Use if else statement of an array
+                    // Choose a column using array arrangement
+                    if (i == 4)  
+                    {
+                        var select = $('<select><option value=""></option></select>')
+                            
+                        .css( {'margin-left': '10px', 'height':'30px', 'width': '350px'} )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        
+                        $( select ).click( function(e) {
+                            e.stopPropagation();
+                        });
+                           
+                        column
+                            .data()
+                            .unique()
+                            .sort()
+                            .each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    } 
+
+                    else
+                    {
+                        var select = $('<select><option value=""></option></select>')
+                        
+                        .css( {'margin-left': '10px', 'height':'30px', } )
+                        .appendTo( $(column.header()) )
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+                        $( select ).click( function(e) {
+                        e.stopPropagation();
+                        });
+                        
+                        
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+                    
+                });       
+            },
+
+            
+        //Original search function
+        //     initComplete: function () {
+        //         this.api()
+            
+        //         .columns([4])
+        //         .every(function () {
+        //             var column = this;
+                    
+        //             var table = $('#example').DataTable();
+        //             table.columns.adjust().draw();
+                    
+        //             var select = $('<select><option value=""></option></select>')
+                            
+        //                 .css( {'margin-left': '10px', 'height':'30px', 'width': '350px'} )
+        //                 .appendTo( $(column.header()) )
+        //                 .on('change', function () {
+        //                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
+        //                     column.search(val ? '^' + val + '$' : '', true, false).draw();
+        //                 });
+                        
+        //                 $( select ).click( function(e) {
+        //                     e.stopPropagation();
+        //                 });
+                           
+        //                 column
+        //                     .data()
+        //                     .unique()
+        //                     .sort()
+        //                     .each(function (d, j) {
+        //                         select.append('<option value="' + d + '">' + d + '</option>');
+        //                 });
+        //         });
+        // },
+
+            
+        });
+    
+
+        //Index numbering
+        table.on('order.dt search.dt', function () {
+            let i = 1;
+    
+            table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+                this.data(i++);
+            });
+        }).draw();
+        
+        //Search funtion css
+        $('[type=search]').each(function () {
+            // $(this).attr("placeholder", "Search...");
+            $(this).after('<span class="fa fa-search"></span>');
+        });
+    }
+  );
+
+</script>
+{% endblock javascripts %}

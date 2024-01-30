@@ -1,0 +1,174 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+{% endblock stylesheets %}
+
+{% block content %}
+<div class="container-fluid py-4 h-100">
+  <div class="row mb-4">
+    <div style="height: 74vh;">
+      <div class="col" style="height: 100%;">
+        <div class="card" style="height: 100%;">
+          <div class="card-body p-4" style="height: 10%;">
+            <h5><b>SENARAI INISIATIF</b></h5>
+          </div>
+          <div class="card-body px-0 py-0" style="height: 85%;">
+            <div class="table-responsive p-0" style="height: 100%;">
+              <table class="table align-items-center justify-content-center mb-0 table table-bordered">
+                <thead>
+                  <tr>
+                    {% for column in workingFile.columns %}
+                    <th>
+                        {{ column }}
+                    </th>
+                    {% endfor %}
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for index, row in workingFile.iterrows %}
+                  <tr>
+                    {% for cell in row %}
+                    <td>
+                      {{ cell }}
+                    </td>
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row py-4">
+  <button id="submitbutton" type="button" class="btn btn-warning btn-lg" 
+    style="width: 220px; background-color: #7AC142; margin-left: 10px;">
+      HANTAR
+  </button>
+  <button id="cancelbutton" type="button" class="btn btn-warning btn-lg" style="width:220px; margin-left: 10px;">
+    {% csrf_token %}
+    BATAL
+  </button>
+</div>
+
+<input type="hidden" id="refreshed" value="no">
+{% endblock content %}
+    
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="text/javascript">
+
+  document.getElementById('cancelbutton').addEventListener("click", function() {
+    batal('{{file_name}}');
+  }, false);
+
+  function batal(file_name){
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    let element = document.getElementById("cancelbutton");
+  
+    Swal.fire({
+      icon: 'warning',
+      title: 'Batal Penyerahan?',
+      text: 'Anda pasti anda mahu batalkan penyerahan ini?',
+      showCancelButton: true,
+      cancelButtonText: 'Tidak',
+      showLoaderOnConfirm: true,
+      confirmButtonText: 'Batal',
+      confirmButtonColor: '#DC3A3A',
+      focusConfirm: false,
+      allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            method:'POST',
+            url: "{% url 'cancel_submission_masterlist' %}",
+            headers: {'X-CSRFToken': csrftoken},
+            data : {
+              file_name : file_name,
+              csrfmiddlewaretoken : csrftoken,
+              },
+              success:function(data)
+              {
+                data;
+                Swal.fire(
+                  {
+                    position: 'middle',
+                    icon: 'success',
+                    text: 'Fail inisiatif telah dipadam',
+                    timer: 1500,
+                    showConfirmButton: false,
+                  })
+                .then(function() {
+                window.location = '/masterlist-budget';
+                })
+              }
+            })
+          }
+        })
+      }
+
+  onload=function(){
+    var e=document.getElementById("refreshed");
+    if(e.value=="no")e.value="yes";
+    else{e.value="no";location.reload();}
+  }
+
+  document.getElementById('submitbutton').addEventListener("click", function() {
+    hantar('{{file_name}}');
+  }, false);
+
+  function hantar(file_name){
+    var csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    let element = document.getElementById("submitbutton");
+
+    Swal.fire({
+      icon: 'warning',
+      title: 'Sahkan Penyerahan?',
+      text: 'Anda pasti anda mahu sahkan penyerahan ini?',
+      showCancelButton: true,
+      cancelButtonText: 'Tidak',
+      showLoaderOnConfirm: true,
+      confirmButtonText: 'Sahkan',
+      confirmButtonColor: '#7AC142',
+      focusConfirm: false,
+      allowOutsideClick: false
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            method:'POST',
+            url:"{% url 'submit_masterlist' %}",
+            headers: {'X-CSRFToken': csrftoken},
+            data : {
+              file_name : file_name,
+              csrfmiddlewaretoken : csrftoken,
+              },
+              success:function(data)
+              {
+                data;
+                Swal.fire({
+                  position: 'middle',
+                  icon: 'success',
+                  text: 'Inisiatif anda telah dimuat naik!',
+                  timer: 2000,
+                  showConfirmButton: false,
+                })
+                .then(function() {
+                window.location = '/masterlist-budget';
+                })
+              }
+            })
+          }
+        })
+      }
+
+  
+</script>
+{% endblock javascripts %}

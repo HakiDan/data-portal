@@ -1,0 +1,889 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Dashboard {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+  <link rel="stylesheet" href="/static/assets/css/table.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/datatables.mark.js/2.0.0/datatables.mark.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.min.css">
+  <link rel="stylesheet" href="/static/assets/css/table.css">
+  <style>
+
+  tr { height: 5.75vh; }
+
+  </style>
+
+{% endblock stylesheets %}
+
+{% block content %}
+
+{% for group in user.groups.all %}
+  {% if group.name == "ia_group" %}
+
+  <div class="container-fluid py-4">
+    <div class="row">
+      <div class="col p-0" style="min-height: 85vh;">
+        <div class="row m-0 mb-4" style="width: 100%; height: fit-content; display: flex; flex-wrap: nowrap;">
+
+          <div class="col">
+            <div class="card" style="height: 100%; text-align: center;">
+              <div class="card-header px-4  py-3" style="margin: 0%; height: fit-content; word-wrap: break-word;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">JUMLAH PERUNTUKAN (RM)</h5>
+              </div>
+              <div class="card-body py-0 pb-3" style="word-wrap: break-word;">
+                <h3 style="margin:0px; font-weight: 600;">{% load humanize %} {{total_allocation|floatformat:2|intcomma}}</h3>
+              </div>
+            </div>
+         </div>
+
+          <div class="col">
+            <div class="card" style="height: 100%; text-align: center;">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content; word-wrap: break-word;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">JUMLAH PENYALURAN (RM)</h5>
+              </div>
+              <div class="card-body py-0 pb-3" style="word-wrap: break-word;">
+                <h3 style="margin:0px; font-weight: 600;">{% load humanize %} {{total_disbursed|floatformat:2|intcomma}}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="card" style="height: 100%; text-align: center">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content; word-wrap: break-word;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">JUMLAH PENERIMA</h5>
+              </div>
+              <div class="card-body py-0 pb-3" style="word-wrap: break-word;">
+                <h3 style="margin:0px; font-weight: 600;">{% load humanize %} {{total_bene|intcomma}}</h3>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      
+
+        <div class="row m-0 mb-4" style="width: 100%; height: fit-content; display: flex; flex-wrap: nowrap;">
+
+          <div class="col-6" style="height: 100%">
+            <div class="card" style="height: 100%">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">PENYALURAN MENGIKUT BULAN (RM)</h5>
+              </div>
+              
+              <div class="card-body pt-0">
+                <canvas id="bulanan" style="height: 40vh;"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-6" style="height: 100%">
+            <div class="card" style="height: 100%">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">PENYALURAN MENGIKUT NEGERI (RM)</h5>
+              </div>
+              <div class="card-body pt-0">
+                <canvas id="negeri" style=" height: 40vh;"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row m-0 mb-4" style="width: 100%; height: fit-content; display: flex; flex-wrap: wrap;">
+
+          <div class="col" style="height: 100%; flex: auto; display: flex; flex-wrap: wrap;">
+            <div class="card" style="height: 100%; width: 100%">
+              <div class="card-body" style="height: 100%;  position: relative; justify-content: center">
+                <h5 style="font-weight: bold; padding: 0px; margin: 0%; flex-wrap: wrap; text-align: left; height: 30px;">INDIVIDU</h5>
+              </div>
+            </div>
+          </div>
+ 
+        </div>
+
+        <div class="row m-0 mb-4" style="width: 100%; height: 400px; display: flex; flex-wrap: wrap;">
+
+          <div class="col-4" style="height: 100%; flex: auto; display: flex; flex-wrap: wrap;">
+            <div class="card" style="height: 100%; width: 100%">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">PENERIMA MENGIKUT BANGSA</h5>
+              </div>
+              <div class="card-body pt-0" style="position: relative; height: 100%; width: 100%;">
+                <canvas id="bangsa"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4" style="height: 100%; flex: auto; display: flex; flex-wrap: wrap;">
+            <div class="card" style="height: 100%; width: 100%;">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">PENERIMA MENGIKUT JANTINA</h5>
+              </div>
+              <div class="card-body pt-0" style="position: relative; height: 100%; width: 100%;">
+                <canvas id="jantina"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4" style="height: 100%; flex: auto; display: flex; flex-wrap: wrap">
+            <div class="card" style="height: 100%; width: 100%">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">JULAT UMUR</h5>
+              </div>
+              <div class="card-body pt-0" style="position: relative; height: 100%; width: 100%;">
+                <canvas id="umur"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row m-0 mb-4" style="width: 100%; height: fit-content; display: flex; flex-wrap: wrap">
+
+          <div class="col" style="height: 100%; flex: auto; display: flex; flex-wrap: wrap">
+            <div class="card" style="height: 100%; width: 100%">
+              <div class="card-body" style="height: 100%;  position: relative; justify-content: center">
+                <h5 style="font-weight: bold; padding: 0px; margin: 0%; flex-wrap: wrap; text-align: left; height: 30px">ENTITI</h5>
+              </div>
+            </div>
+          </div>
+ 
+        </div>
+
+        <div class="row m-0 mb-4" style="width: 100%; height: 500px; display: flex; flex-wrap: nowrap;">
+  
+          <div class="col-6" style="height: 100%">
+            <div class="card" style="height: 100%">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content">
+                <h5 class="font-weight-bolder" style="margin: 0px; word-wrap: break-word;">SEKTOR EKONOMI 10 TERATAS (RM)</h5>
+              </div>
+              <div class="card-body pt-0" style="position: relative; height: 100%; width: 100%">
+                <canvas id="sektor" style="height: 20vh;"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6" style="height: 100%;">
+            <div class="card" style="height: 100%;">
+              <div class="card-header px-4 py-3" style="margin: 0%; height: fit-content;">
+                <h5 class="font-weight-bolder" style="margin: 0px;">SAIZ PERNIAGAAN</h5>
+              </div>
+              <div class="card-body pt-0" style="position: relative; height: 100%; width: 100%;">
+                <canvas id="saiz" style="height: 20vh;"></canvas>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row m-0 mb-4" style="width: 100%; min-height: 10vh; display: flex; flex-wrap: wrap;">
+
+          <div class="col" style="height: 100%; display: flex; flex-wrap: wrap;">
+            <div class="card" style="height: 100%; width: 100%;">
+        
+              <div class="card-body px-4" style="height: 100%; padding-bottom: 1rem; padding-top: 0%;">
+                <table id="table" class="display nowrap cell-border" style="width:100%;">
+                  <thead>
+                    <tr>
+                      <th>No. </th>
+                      <th>Nama Inisiatif </th>
+                      <th>Jumlah Penerima </th>
+                      <th>Jumlah Peruntukkan (RM Juta)</th>
+                      <th>Jumlah Penyaluran (RM) </th>
+                      <th>Tarikh</th>
+                    </tr>  
+                  </thead>
+
+                  <tbody>
+
+                    {% for sub_init_name_table_label, beneficiaries_array, allocations_array, ranged_disbursed_values, month_table_value in items_ia_tables %}
+                    <tr>
+                      <td></td>
+                      <td style="text-align: left; word-wrap: normal;">{{sub_init_name_table_label}}</td> 
+                      <td>{% load humanize %} {{beneficiaries_array|intcomma}}</td> 
+                      <td>{% load humanize %} {{allocations_array|floatformat:2|intcomma}}</td>
+                      <td>{% load humanize %} {{ranged_disbursed_values|floatformat:2|intcomma}}</td>
+                      <td>{{month_table_value}}</td> 
+                       
+                    </tr>
+
+                    {% endfor %}
+                  </tbody>
+                </table> 
+              </div>
+              
+            </div>
+          </div>       
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% elif group.name == "pid_group" %}
+
+  <div class="card m-4">
+    <div class="card-body p-2">
+      <iframe id="idIframe" onload="iframeLoaded()" src="{{superset_url}}" style="border:none;width:100%;height:3420px;"></iframe>
+    </div>
+  </div>
+
+  <!-- <div class="card my-4" style="height: 85vh; align-items: center; margin: 26px;">        
+    <div class="card" style="margin:auto; background-color:transparent;  width: 90vh; box-shadow: none;">
+        <div class="container-fluid">
+            <div class="card-body" style="text-align: center;">
+            
+              <div style="height: 140px;">
+                <img src="/static/assets/img/LAKSANA_LOGO_'23-01.svg" alt="..." style="height: 170px; width: 400px;">
+              </div>
+              <div style="height: 100px;"></div>
+              <h1 style="font-size: 60px; color: gray;">Harap Maaf</h1>
+              <h3 style="font-size: 20px; color: gray; font-weight: normal;">Halaman sesawang tidak lagi beroperasi. Segala kesulitan adalah amat dikesali.</h3>
+            </div>
+        </div>
+    </div>
+  </div> -->
+
+  {% elif group.name == "dq_group" %}
+
+  <div class="card my-4" style="height: 85vh; align-items: center; margin: 26px;">        
+    <div class="card" style="margin:auto; background-color:transparent;  width: 90vh; box-shadow: none;">
+      <div class="container-fluid">
+        <div class="card-body" style="text-align: center;">
+          <h1 style="font-size: 60px; color: gray;">Akan Datang</h1>
+          <h3 style="font-size: 20px; color: gray; font-weight: normal;">Halaman sesawang sedang dalam pembinaan</h3> 
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+{% endfor %} 
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+<script src="/static/assets/js/plugins/chartjs.min.js"></script>
+<script src="/static/assets/js/plugins/Chart.extension.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/g/mark.js(jquery.mark.min.js)"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.10.13/features/mark.js/datatables.mark.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+<script>
+
+  const bulanan = document.getElementById('bulanan');
+  const negeri = document.getElementById('negeri');
+  const bangsa = document.getElementById('bangsa');
+  const jantina = document.getElementById('jantina');
+  const umur = document.getElementById('umur');
+  const sektor = document.getElementById('sektor');
+  const saiz = document.getElementById('saiz');
+
+  // var id = {{init_id|safe}}; 
+  var init_name_label = {{init_name_label|safe}};
+  var sub_init_name = {{sub_init_name|safe}};
+  var races = {{races|safe}};
+  var race_beneficiaries = {{race_beneficiaries|safe}};
+  var sectors = {{sectors|safe}};
+  var sector_disbursed = {{sector_disbursed|safe}};
+  var state_unique_labels = {{state_unique_labels|safe}};
+  var state_values = {{state_values|safe}};
+  var biz_size_unique_labels = {{biz_size_unique_labels|safe}};
+  var biz_size_values = {{biz_size_values|safe}}; 
+  var age_values = {{age_values|safe}};
+  var age_groups_labels = {{age_groups_labels|safe}};
+  var gender = {{gender|safe}};
+  var gender_ben = {{gender_ben|safe}};
+
+  var disbursed_values = {{disbursed_values|safe}};
+
+  var month_names = {{month_names|safe}};
+
+  const monthly_data = disbursed_values
+  const bulan = month_names
+
+  // Define a predefined array of colors
+  const predefinedColors = [
+    "#9ad0f5",
+    "#ffb1c1",
+    "#ffcf9f",
+    "#ffe6aa",
+    "#a5dfdf",
+    "#ccb2ff",
+    "#ef9b20", 
+    "#edbf33", 
+    "#ede15b", 
+    "#bdcf32", 
+    "#87bc45", 
+    "#27aeef", 
+    "#b33dc6",
+    "#b3d4ff", 
+    "#00bfa0"
+  ];
+
+  // Prepare data for the chart
+  const disbursed_monthly_data = {
+      labels: bulan, // Biz_sizes labels
+      datasets: [] // Data list for the chart    
+  };
+
+  // Create datasets for appended months
+  for (let i = 0; i < init_name_label.length; i++) {
+      const dataset = {
+          label: init_name_label[i],
+          data: [],
+          backgroundColor: predefinedColors[i % predefinedColors.length], // Assign predefined colors
+      };
+      
+      for (let j = 0; j < monthly_data[i].length; j++) {
+          dataset.data.push(monthly_data[i][j]);
+          
+      }
+      disbursed_monthly_data.datasets.push(dataset);
+  }
+
+  new Chart(bulanan, {
+    type: 'bar',
+    data: disbursed_monthly_data,
+
+    options: {
+
+      plugins: {
+        legend: {
+            display: true
+         }
+      },
+      
+      scales: {
+        x: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        }
+      },
+
+      responsive: true,
+      maintainAspectRatio: false,
+
+    }
+  });
+
+
+  const state_array = state_values
+  const state_groups = state_unique_labels;
+
+  // Prepare data for the chart
+  const state_data = {
+      labels: state_groups, // Biz_sizes labels
+      datasets: [] // Data list for the chart
+      
+  };
+
+  // Create datasets for appended state
+  for (let i = 0; i < init_name_label.length; i++) {
+      const dataset = {
+          label: init_name_label[i],
+          data: [],
+          backgroundColor: predefinedColors[i % predefinedColors.length]
+      };
+      
+      for (let j = 0; j < state_array[i].length; j++) {
+          dataset.data.push(state_array[i][j]);
+          
+      }
+      state_data.datasets.push(dataset);
+  }
+
+  new Chart(negeri, {
+    type: 'bar',
+    data: state_data,
+
+    options: {
+
+      plugins: {
+        legend: {
+            display: true
+         }
+      },
+      
+      scales: {
+        x: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        }
+      },
+
+      responsive: true,
+      maintainAspectRatio: false,
+
+    }
+  });
+
+
+  new Chart(bangsa, {
+    type: 'doughnut',
+    data: {
+      labels: races,
+      datasets: [{
+        label: 'Penerima',
+        data: race_beneficiaries,
+        backgroundColor: [
+        "#9ad0f5",
+        "#ffb1c1",
+        "#ffcf9f",
+        "#ffe6aa",
+        "#a5dfdf",
+        "#ccb2ff",
+        "#ef9b20", 
+        "#edbf33", 
+        ],
+        
+        borderWidth: 1
+      },
+      ]
+    },
+
+    options: {
+      plugins: {
+        title: {
+          display: true,
+        },
+        legend:{
+          display: true,
+          position: 'left',
+        },
+        
+      },
+
+      responsive: true,
+      maintainAspectRatio: false,
+      aspectRatio: 1.4,
+
+    }
+  });
+
+
+  new Chart(jantina, {
+    type: 'doughnut',
+    data: {
+      labels: gender,
+      datasets: [{
+        label: 'Penerima',
+        data: gender_ben,
+        backgroundColor: [
+          "#9ad0f5",
+          "#ffb1c1",
+          "#edbf33",
+        ],
+
+        borderWidth: 1
+      },
+      ]
+    },
+
+    options: {
+      plugins: {
+        title: {
+          display: true,
+        },
+        legend:{
+          display: true,
+          position: 'left',
+        },
+
+      },
+
+      responsive: true,
+      maintainAspectRatio: false,
+      aspectRatio: 1.4,
+
+    }
+  });
+
+
+  const final_count_values_2d = age_values
+  // Labels for the age groups
+  const age_groups = age_groups_labels
+
+  // Prepare data for the chart
+  const age_data = {
+      labels: age_groups, // Use labels if needed
+      datasets: []
+  };
+
+  // Create datasets for each age group
+  for (let i = 0; i < init_name_label.length; i++) {
+      const dataset = {
+          label: init_name_label[i],
+          data: [],
+          backgroundColor: predefinedColors[i % predefinedColors.length],
+      };
+      
+      for (let j = 0; j < final_count_values_2d[i].length; j++) {
+          dataset.data.push(final_count_values_2d[i][j]);
+      }
+      age_data.datasets.push(dataset);
+  }
+  
+  new Chart(umur, {
+    type: 'bar',
+    data: age_data,
+
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          grid: {
+                  display: false
+               }
+        },
+        legend: {
+            display: true,
+            grid: {
+                  display: false
+               }
+         }
+
+      },
+
+      indexAxis: 'y',
+      scales: {
+        x: {
+        stacked: true,
+        grid: {
+                  display: false
+               }
+        },
+        y: {
+          beginAtZero: true,
+          stacked: true,
+          grid: {
+                  display: false
+               }
+        }
+      },
+      responsive: true,
+      maintainAspectRatio: false,
+
+    }
+  });
+
+
+  const sector_array = sector_disbursed
+  const sector_groups = sectors;
+
+  // Prepare data for the chart
+  const sector_data = {
+      labels: sector_groups, // Biz_sizes labels
+      datasets: [] // Data list for the chart
+      
+  };
+
+  // Create datasets for appended biz_sizes
+  for (let i = 0; i < init_name_label.length; i++) {
+      const dataset = {
+          label: init_name_label[i],
+          data: [],
+          backgroundColor: predefinedColors[i % predefinedColors.length],
+      };
+      
+      for (let j = 0; j < sector_array[i].length; j++) {
+          dataset.data.push(sector_array[i][j]);
+          
+      }
+      sector_data.datasets.push(dataset);
+  }
+
+  new Chart(sektor, {
+    type: 'bar',
+    data: sector_data,
+
+    options: {
+
+      plugins: {
+        legend: {
+            display: true
+         }
+      },
+      
+      scales: {
+        x: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        }
+      },
+
+      responsive: true,
+      maintainAspectRatio: false,
+
+    }
+  });
+
+
+  const biz_size_array = biz_size_values
+  const biz_groups = biz_size_unique_labels;
+
+  // Prepare data for the chart
+  const biz_size_data = {
+      labels: biz_groups, // Biz_sizes labels
+      datasets: [] // Data list for the chart
+      
+  };
+
+  for (let i = 0; i < init_name_label.length; i++) {
+      const dataset = {
+          label: init_name_label[i],
+          data: [],
+          backgroundColor: predefinedColors[i % predefinedColors.length],
+      };
+      
+      for (let j = 0; j < biz_size_array[i].length; j++) {
+          dataset.data.push(biz_size_array[i][j]);
+          
+      }
+      biz_size_data.datasets.push(dataset);
+  }
+
+
+  new Chart(saiz, {
+    type: 'bar',
+    data: biz_size_data,
+
+    options: {
+
+      plugins: {
+        legend: {
+            display: true
+         }
+      },
+      
+      scales: {
+        x: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        },
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          grid: {
+                  display: false
+               }
+        }
+      },
+
+      responsive: true,
+      maintainAspectRatio: false,
+
+    }
+  });
+
+
+$(document).ready(function () {
+
+  var table = $('#table').DataTable({
+    
+    "pageLength": 12,
+    //Search Filter
+    columnDefs: [
+        {
+            searchable: false,
+            orderable: false,
+            width: 50,
+            targets: [0],
+        },
+
+        // {  
+        //   orderable: false,
+        //   targets: [1],
+        //   render: function ( data, type, row ) 
+        //     {
+        //       return '<span style="white-space:wrap">' + data + "</span>";   
+        //     }
+        // },
+
+        //Text Align Center
+        { className: 'text-center', targets: [0,2,3,4,5] },
+      ],
+
+      order: [],
+      fixedWidth: true,
+      fixedColumns: true,
+      scrollX: true,
+      scrollY: false,
+      autowidth: false,
+
+      //Higlight Search
+      mark: true,
+
+      //Buttons and Tables Positioning
+      dom: "<'row'<'col-sm-12 col-md-6'B><'col-sm-12 col-md-6'f>>" +
+              "<'row'<'col-sm-12'tr>>" +
+              "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+
+      //Buttons features and css
+      buttons: [
+          {
+              text: 'INISIATIF BERKAITAN',
+              className: 'btn btn-default btn-sm-add',
+          }
+      ],
+
+      scrollCollapse: true,
+
+      // fixedColumns:{
+      //     heightMatch: 'none',
+      // },
+
+      // Labelling
+      language: {
+          "search": "",
+          "info": "Menunjukkan hasil _START_ hingga _END_ daripada _TOTAL_ data",
+          "zeroRecords": "Tiada rekod ditemui",
+          "infoEmpty":      "Menunjukkan 0 hasil carian",
+          "infoFiltered":   "(ditapis daripada _MAX_ rekod keseluruhan)",
+          "thousands": "'",
+          "decimal": ".",
+          'paginate': {
+              'previous': '<',
+              'next': '>'
+              },
+
+        },
+
+        // Filter Column Selection
+        initComplete: function () {
+
+          this.api()
+              .columns([1,5])
+              .every(function (i) {
+                var column = this;
+
+                var table = $('#example').DataTable();
+                table.columns.adjust().draw();
+
+                if (i == 1)  
+                {
+                    var select = $('<select><option value=""></option></select>')
+
+                    // adjust size of column header dropdown filter
+                        
+                    .css( {'margin-left': '10px', 'height':'30px', 'width': '350px'} )
+                    .appendTo( $(column.header()) )
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+                    
+                    $( select ).click( function(e) {
+                        e.stopPropagation();
+                    });
+                        
+                }
+
+                else if (i == 5)  
+                {
+                    var select = $('<select><option value=""></option></select>')
+
+                    // adjust size of column header dropdown filter
+                        
+                    .css( {'margin-left': '10px', 'height':'30px', 'width': '100px'} )
+                    .appendTo( $(column.header()) )
+                    .on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+                    
+                    $( select ).click( function(e) {
+                        e.stopPropagation();
+                    });
+
+                }
+                
+                column
+                    .data()
+                    .unique()
+                    .sort()
+                    .each(function (d, j) {
+                        select.append('<option value="' + d + '">' + d + '</option>');
+                    });
+
+              });
+
+            
+                
+        },
+
+        
+    });
+
+
+    //Index numbering
+    table.on('order.dt search.dt', function () {
+        let i = 1;
+
+        table.cells(null, 0, { search: 'applied', order: 'applied' }).every(function (cell) {
+            this.data(i++);
+        });
+    }).draw();
+
+    $('[type=search]').each(function () {
+        $(this).after('<span class="fa fa-search"></span>');
+    });
+    
+}
+
+
+);
+
+
+</script>
+
+{% endblock javascripts %}

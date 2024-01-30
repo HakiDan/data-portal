@@ -1,0 +1,127 @@
+<!-- {% extends 'layouts/base-fullscreen.html' %} -->
+
+{% block title %} Log In {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+<style>
+  
+form {
+  color: #d1d1d1;
+}
+
+</style>
+
+{% block content %}
+<section class="gradient-custom" style="background-color: lightgray; min-height: 100%;">
+  <div class="container py-5" style="min-height: 100vh; margin: auto;">
+    <div class="row d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card text-white" style="border-radius: 1rem; background-color: white">
+          <div class="card-body p-5 text-center mb-0" style="height: fit-content;">
+
+            <div class="mt-md-0 pb-5 mb-0">
+              <img src="../static/assets/img/logo_v1.png" class="navbar-brand-img h-20 w-20" alt="...">
+              <div class="card-header text-left bg-transparent pt-5" >
+                <h4 class="text-info text-gradient" style="text-align: center;">
+                  PORTAL DATA LAKSANA (PODS)
+                </h4>
+                <p style="text-align: center; color: black;">
+                  Sila masukkan nama pengguna dan kata laluan                
+                </p>
+              </div>
+
+              {% for message in messages %}
+                <div class="alert alert-info alert-dismissible fade show my-4" role="alert">             
+                  <strong>{{ message }}</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              {% endfor %}
+              {% if msg %}
+                <div class="alert alert-warning alert-dismissible fade show my-4" role="alert">             
+                  <strong>{{msg}}</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>   
+              {% endif %} 
+
+              <form role="form text-left" method="post" action="">
+                {% csrf_token %}
+                <label>NAMA PENGGUNA</label>
+                <div class="mb-3" style="color: #d1d1d1;">
+                  {{ form.username }}
+                </div>
+                <label>KATA LALUAN</label>
+                <div class="mb-3">
+                  {{ form.password }}
+                </div>
+                <div style="text-align: left;">
+                  <input type="checkbox" id="box">
+                  <label for="box" style="color: black; font-family: Arial, Helvetica, sans-serif;">Lihat kata laluan</label>
+                </div>
+                
+                <div class="text-center">
+                  <button type="submit" name="login" class="btn bg-gradient-info w-100 mt-4 mb-0">LOG MASUK</button>
+                </div>
+              </form>
+            </div>
+            <div>
+              <p class="mb-0"><a href="{% url 'password_reset' %}" class="text-info text-gradient font-weight-bold">Lupa kata laluan anda?</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+     
+<!-- <div class="card" style="background-color:transparent;  width: 100vh; box-shadow: none; align-items: center; height: 100vh; margin: auto;">
+  <div class="container-fluid pb-6" style="margin: auto;">
+    <div class="card-body" style="text-align: center;">
+      <div class="container" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+        <img src="/static/assets/img/LAKSANA_LOGO_'23-01.svg" alt="..." style="height: 100px; width: 300px; padding-right: 60px;">
+        <img src="../static/assets/img/logo_v1.png" class="navbar-brand-img h-20" alt="..." style="margin-right: 70px; width: 50px; height: 70px; ">
+      </div>
+      <div style="height: 20px;"></div>
+      <div class="container" style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center;">
+        <img src="/static/assets/img/warning.png" alt="..." style="height: 170px; width: 17 0px;">
+      </div>
+      <div style="height: 20px;"></div>
+      <h1 style="font-size: 40px; color: black;">Laman Tidak Tersedia</h1>
+      <h3 style="font-size: 20px; color: gray; font-weight: normal;">Segala kesulitan adalah amat dikesali. Sila hubungi pengurus projek anda untuk sebarang pertanyaan.</h3>
+    </div>
+  </div>
+</div> -->
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script>
+    document.getElementById('box').addEventListener("click", reveal);
+
+    function reveal()
+    {
+    if(document.getElementById('box').checked)
+      {
+        document.getElementById("id_password").type='text';
+      }
+    else {
+      document.getElementById("id_password").type='password';
+      }
+    }
+
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+
+{% endblock javascripts %}
